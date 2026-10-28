@@ -1,4 +1,4 @@
-# zonakerja. (clone modern)
+# Kerja Sama (clone modern)
 
 Manajemen tim lapangan: tugas kanban, laporan, tim dengan ID undangan + approval admin, login fingerprint (WebAuthn). Inspirasi: ruangkerja.my.id — dibangun ulang dengan React.
 

@@ -1,4 +1,4 @@
-// Data layer zona-kerja: localStorage multi-user (demo) — adapter Supabase menyusul.
+// Data layer Kerja Sama (ex zona-kerja): localStorage multi-user (demo) — adapter Supabase menyusul.
 const KEY = 'zona_kerja_db_v1'
 const seed = {
   users: [

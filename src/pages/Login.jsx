@@ -46,7 +46,7 @@ export default function Login() {
     <div className="min-h-screen grid lg:grid-cols-[1.1fr_1fr]">
       {/* Panel kiri: showcase */}
       <div className="hidden lg:flex flex-col justify-between bg-gradient-to-br from-blue to-violet text-white p-10">
-        <div className="font-disp font-extrabold text-2xl">zona<span className="text-white/70">_kerja_</span>.</div>
+        <div className="font-disp font-extrabold text-2xl">Kerja<span className="text-white/70">Sama</span></div>
         <div>
           <h1 className="font-disp text-4xl font-extrabold leading-tight">Kelola tim lapangan<br/>tanpa ribet.</h1>
           <p className="text-white/80 mt-4 max-w-md">Tugas harian, deadline, dan laporan lapangan — semua tersinkron dalam satu tempat. Dibuat untuk mandor, surveior, dan tim lapangan Indonesia.</p>
@@ -60,7 +60,7 @@ export default function Login() {
       {/* Panel kanan: form */}
       <div className="flex flex-col items-center justify-center p-6">
         <div className="w-full max-w-sm">
-          <div className="font-disp font-extrabold text-xl mb-1 lg:hidden">zona<span className="text-blue">_kerja_</span>.</div>
+          <div className="font-disp font-extrabold text-xl mb-1 lg:hidden">Kerja<span className="text-blue">Sama</span></div>
           <div className="flex gap-1 bg-line/60 p-1 rounded-xl mb-5">
             {['login','daftar'].map(t=>(
               <button key={t} onClick={()=>{setTab(t); setErr('')}} className={'flex-1 py-2 rounded-lg text-[13px] font-bold transition '+(tab===t?'bg-white shadow-soft text-ink':'text-inksoft')}>{t==='login'?'Masuk':'Daftar'}</button>

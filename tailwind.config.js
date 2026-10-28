@@ -2,15 +2,17 @@ export default {
   content: ['./index.html','./src/**/*.{js,jsx}'],
   theme: { extend: {
     colors: {
-      paper:'#F0F4F8', ink:'#0F172A', inksoft:'#64748B', line:'#E2E8F0',
-      blue:{DEFAULT:'#2563EB',dark:'#1D4ED8',soft:'#DBEAFE'},
-      green:{DEFAULT:'#10B981',soft:'#D1FAE5'},
-      amber:{DEFAULT:'#F59E0B',soft:'#FEF3C7'},
-      red:{DEFAULT:'#EF4444',soft:'#FEE2E2'},
-      violet:{DEFAULT:'#8B5CF6',soft:'#EDE9FE'},
+      bg:'#F4F6FA', card:'#FFFFFF', card2:'#F1F3F8', line:'#E6E9F0',
+      ink:'#10131A', inksoft:'#5C6470', dim:'#9AA1AD',
+      blue:{DEFAULT:'#2563EB',dark:'#1D4ED8',soft:'#EAF0FE'},
+      green:{DEFAULT:'#16A34A',soft:'#E8F7EE'},
+      gold:{DEFAULT:'#D97706',soft:'#FEF3E2'},
+      amber:{DEFAULT:'#D97706',soft:'#FEF3E2'},
+      red:{DEFAULT:'#DC2626',soft:'#FDECEC'},
+      violet:{DEFAULT:'#7C3AED',soft:'#F1EBFE'},
     },
     fontFamily: { disp:['Sora','sans-serif'], body:['"Plus Jakarta Sans"','sans-serif'] },
-    boxShadow: { soft:'0 1px 3px rgba(15,23,42,.06), 0 8px 24px rgba(15,23,42,.06)' },
+    boxShadow: { soft:'0 2px 12px rgba(16,19,26,.06)', pop:'0 10px 30px rgba(37,99,235,.18)' },
   } },
   plugins: []
 }
