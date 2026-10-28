@@ -4,6 +4,11 @@ import Dashboard from './pages/Dashboard.jsx'
 import Tasks from './pages/Tasks.jsx'
 import Reports from './pages/Reports.jsx'
 import Team from './pages/Team.jsx'
+import Features from './pages/Features.jsx'
+import Announcements from './pages/Announcements.jsx'
+import AttendanceMod from './pages/AttendanceMod.jsx'
+import InventoryMod from './pages/InventoryMod.jsx'
+import ExpensesMod from './pages/ExpensesMod.jsx'
 import Shell from './components/Shell.jsx'
 
 function Guard({children}) {
@@ -20,6 +25,11 @@ export default function App() {
         <Route path="/tugas" element={<Tasks/>}/>
         <Route path="/laporan" element={<Reports/>}/>
         <Route path="/tim" element={<Team/>}/>
+        <Route path="/fitur" element={<Features/>}/>
+        <Route path="/pengumuman" element={<Announcements/>}/>
+        <Route path="/absen" element={<AttendanceMod/>}/>
+        <Route path="/inventori" element={<InventoryMod/>}/>
+        <Route path="/pengeluaran" element={<ExpensesMod/>}/>
       </Route>
     </Routes>
   )

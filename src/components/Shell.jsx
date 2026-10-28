@@ -2,18 +2,34 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { currentUser, logout, loadDB } from '../lib/db.js'
 import { useEffect, useState } from 'react'
 
-const nav = [
+const baseNav = [
   { to:'/', icon:'▦', name:'Beranda' },
   { to:'/tugas', icon:'✅', name:'Tugas' },
   { to:'/laporan', icon:'📝', name:'Laporan' },
   { to:'/tim', icon:'👥', name:'Tim' },
 ]
+const moduleNav = [
+  { key:'announcements', to:'/pengumuman', icon:'📣', name:'Pengumuman' },
+  { key:'attendance', to:'/absen', icon:'⏰', name:'Absen' },
+  { key:'inventory', to:'/inventori', icon:'📦', name:'Inventori' },
+  { key:'expenses', to:'/pengeluaran', icon:'💸', name:'Pengeluaran' },
+]
+const featureNav = feats => [...moduleNav.filter(m=>feats[m.key]), { to:'/fitur', icon:'🧩', name:'Fitur' }]
 const bottom = ['/','/tugas','/laporan','/tim']
 export default function Shell() {
   const [user, setUser] = useState(currentUser())
   const [pending, setPending] = useState(0)
+  const [nav, setNav] = useState(baseNav)
   const nav2 = useNavigate()
-  useEffect(()=>{ setPending(loadDB().users.filter(u=>u.status==='pending').length) }, [])
+  useEffect(()=>{
+    const sync = () => {
+      setPending(loadDB().users.filter(u=>u.status==='pending').length)
+      setNav([...baseNav, ...featureNav(loadDB().features)])
+    }
+    sync()
+    window.addEventListener('zk-features-changed', sync)
+    return () => window.removeEventListener('zk-features-changed', sync)
+  }, [])
   if (!user) return null
   const team = loadDB().teams.find(t=>t.id===user.teamId)
   return (

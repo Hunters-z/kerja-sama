@@ -15,6 +15,11 @@ const seed = {
   reports: [
     { id:'r1', teamId:'T-DEMO', userId:'u2', title:'Laporan mingguan #1', body:'Progress survey 70%, kendala cuaca.', at:new Date().toISOString() },
   ],
+  features: { announcements: true, attendance: true, inventory: false, expenses: false },
+  announcements: [],
+  attendance: [],
+  inventory: [],
+  expenses: [],
   session: null,
 }
 export function loadDB() {
