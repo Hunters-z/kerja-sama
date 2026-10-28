@@ -9,6 +9,7 @@ import Announcements from './pages/Announcements.jsx'
 import AttendanceMod from './pages/AttendanceMod.jsx'
 import InventoryMod from './pages/InventoryMod.jsx'
 import ExpensesMod from './pages/ExpensesMod.jsx'
+import Chat from './pages/Chat.jsx'
 import Shell from './components/Shell.jsx'
 
 function Guard({children}) {
@@ -30,6 +31,7 @@ export default function App() {
         <Route path="/absen" element={<AttendanceMod/>}/>
         <Route path="/inventori" element={<InventoryMod/>}/>
         <Route path="/pengeluaran" element={<ExpensesMod/>}/>
+        <Route path="/chat" element={<Chat/>}/>
       </Route>
     </Routes>
   )

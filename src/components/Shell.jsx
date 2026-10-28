@@ -13,6 +13,7 @@ const moduleNav = [
   { key:'attendance', to:'/absen', icon:'⏰', name:'Absen' },
   { key:'inventory', to:'/inventori', icon:'📦', name:'Inventori' },
   { key:'expenses', to:'/pengeluaran', icon:'💸', name:'Pengeluaran' },
+  { key:'chat', to:'/chat', icon:'💬', name:'Chat' },
 ]
 const featureNav = feats => [...moduleNav.filter(m=>feats[m.key]), { to:'/fitur', icon:'🧩', name:'Fitur' }]
 const bottom = ['/','/tugas','/laporan','/tim']

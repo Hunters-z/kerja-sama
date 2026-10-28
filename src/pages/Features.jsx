@@ -6,6 +6,7 @@ const CATALOG = [
   { key:'attendance', icon:'⏰', name:'Absen Hadir', desc:'Anggota absen masuk/pulang dengan waktu tercatat' },
   { key:'inventory', icon:'📦', name:'Inventori Lapangan', desc:'Catat peralatan & stok barang tim' },
   { key:'expenses', icon:'💸', name:'Pengeluaran Tim', desc:'Catat biaya operasional lapangan' },
+  { key:'chat', icon:'💬', name:'Chat Tim', desc:'Pesan, voting, dan kirim file dalam tim' },
 ]
 export default function Features() {
   const [db, setDb] = useState(loadDB())
