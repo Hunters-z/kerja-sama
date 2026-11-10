@@ -1,7 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-body{ @apply bg-bg text-ink font-body antialiased; }
-.card{ @apply bg-white border border-line rounded-2xl shadow-soft; }
+
+@layer base {
+  :root {
+    --background: 220 27% 98%;
+    --foreground: 223 24% 8%;
+    --card: 0 0% 100%;
+    --card-foreground: 223 24% 8%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 223 24% 8%;
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 26% 95%;
+    --secondary-foreground: 223 24% 8%;
+    --muted: 220 26% 95%;
+    --muted-foreground: 215 12% 40%;
+    --accent: 220 26% 95%;
+    --accent-foreground: 223 24% 8%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 20% 91%;
+    --input: 220 20% 91%;
+    --ring: 221 83% 53%;
+    --radius: 1rem;
+  }
+}
+@layer base {
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground font-body antialiased; }
+}
+.card{ @apply bg-card border border-line rounded-2xl shadow-soft; }
 .btn-blue{ @apply inline-flex items-center justify-center gap-2 bg-blue hover:bg-blue-dark text-white font-bold rounded-xl transition active:scale-[.98]; }
 .pill{ @apply text-[11px] font-bold px-2.5 py-1 rounded-full inline-block; }

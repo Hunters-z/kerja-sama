@@ -1,6 +1,8 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { currentUser, logout, loadDB } from '../lib/db.js'
+import { currentUser, logout, loadDB } from '@/lib/db.js'
 import { useEffect, useState } from 'react'
+import { Button } from '@/components/ui/button.jsx'
+import { Badge } from '@/components/ui/badge.jsx'
 
 const baseNav = [
   { to:'/', icon:'▦', name:'Beranda' },
@@ -39,11 +41,11 @@ export default function Shell() {
       <header className="sticky top-0 z-40 px-3 md:px-5 pt-3">
         <div className="flex items-center gap-2 bg-white rounded-full shadow-soft border border-line pl-4 pr-2 h-14 max-w-6xl mx-auto">
           <span className="font-disp font-extrabold text-blue">Kerja<span className="text-ink">Sama</span></span>
-          <span className="pill bg-blue-soft text-blue-dark hidden sm:inline">{team?.name||'Tim'}</span>
+          <Badge className="hidden sm:inline">{team?.name||'Tim'}</Badge>
           <div className="ml-auto flex items-center gap-2.5">
             <span className="hidden md:block text-[12.5px] text-inksoft">Halo, <b className="text-ink">{user.name}</b></span>
             <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue to-violet text-white grid place-items-center text-[11px] font-bold">{user.name.slice(0,2).toUpperCase()}</div>
-            <button onClick={()=>{logout(); nav2('/login')}} className="pill bg-card2 text-inksoft hover:bg-red-soft hover:text-red">Keluar</button>
+            <Button onClick={()=>{logout(); nav2('/login')}} variant="secondary" size="sm" className="rounded-full hover:bg-red-soft hover:text-red">Keluar</Button>
           </div>
         </div>
       </header>
@@ -55,7 +57,7 @@ export default function Shell() {
               className={({isActive})=>'flex items-center gap-3 rounded-full px-4 py-2.5 text-[13.5px] font-semibold transition '+
                 (isActive?'bg-blue text-white':'text-inksoft hover:bg-card2 hover:text-ink')}>
               <span className="w-5 text-center">{it.icon}</span>{it.name}
-              {it.to==='/tim' && pending>0 && <span className="ml-auto bg-gold text-white text-[10px] px-2 py-0.5 rounded-full">{pending}</span>}
+              {it.to==='/tim' && pending>0 && <Badge className="ml-auto bg-gold text-white" variant="outline">{pending}</Badge>}
             </NavLink>
           ))}
           <div className="mt-auto text-[10.5px] text-dim px-3 py-2">Kerja Sama · data lokal</div>

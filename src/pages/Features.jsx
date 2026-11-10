@@ -1,5 +1,8 @@
 import { useState } from 'react'
-import { loadDB, saveDB, currentUser } from '../lib/db.js'
+import { loadDB, saveDB, currentUser } from '@/lib/db.js'
+import { Button } from '@/components/ui/button.jsx'
+import { Card } from '@/components/ui/card.jsx'
+import { Badge } from '@/components/ui/badge.jsx'
 
 const CATALOG = [
   { key:'announcements', icon:'📣', name:'Pengumuman', desc:'Admin kirim pengumuman ke seluruh tim' },
@@ -22,18 +25,18 @@ export default function Features() {
       <p className="text-inksoft text-[13px] mb-5">{user.role==='admin' ? 'Aktifkan modul yang tim Anda butuhkan — menu muncul otomatis.' : 'Modul aktif di tim Anda (dikelola admin).'}</p>
       <div className="grid md:grid-cols-2 gap-3.5">
         {CATALOG.map(f=>(
-          <div key={f.key} className={'card p-5 flex gap-3.5 '+(db.features[f.key]?'ring-2 ring-blue/40':'')}>
+          <Card key={f.key} className={'p-5 flex gap-3.5 '+(db.features[f.key]?'ring-2 ring-blue/40':'')}>
             <div className="w-11 h-11 rounded-xl bg-blue-soft grid place-items-center text-xl shrink-0">{f.icon}</div>
             <div className="min-w-0">
               <b className="text-[14.5px]">{f.name}</b>
               <p className="text-[12.5px] text-inksoft mt-0.5">{f.desc}</p>
               <div className="mt-2.5">
                 {user.role==='admin'
-                  ? <button onClick={()=>toggle(f.key)} className={'pill font-bold cursor-pointer '+(db.features[f.key]?'bg-green-soft text-emerald-700':'bg-line text-inksoft')}>{db.features[f.key]?'Aktif — klik matikan':'Nonaktif — klik aktifkan'}</button>
-                  : <span className={'pill '+(db.features[f.key]?'bg-green-soft text-emerald-700':'bg-line text-inksoft')}>{db.features[f.key]?'Aktif':'Nonaktif'}</span>}
+                  ? <Button onClick={()=>toggle(f.key)} size="sm" variant="ghost" className={'rounded-full h-6 px-2.5 text-[10px] font-bold '+(db.features[f.key]?'bg-green-soft text-emerald-700 hover:bg-green hover:text-white':'bg-line text-inksoft hover:bg-card2')}>{db.features[f.key]?'Aktif — klik matikan':'Nonaktif — klik aktifkan'}</Button>
+                  : <Badge variant={db.features[f.key]?'success':'secondary'}>{db.features[f.key]?'Aktif':'Nonaktif'}</Badge>}
               </div>
             </div>
-          </div>
+          </Card>
         ))}
       </div>
     </div>

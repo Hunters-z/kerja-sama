@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import { loadDB, saveDB, currentUser } from '../lib/db.js'
+import { loadDB, saveDB, currentUser } from '@/lib/db.js'
+import { Button } from '@/components/ui/button.jsx'
+import { Input } from '@/components/ui/input.jsx'
+import { Badge } from '@/components/ui/badge.jsx'
+import { Card } from '@/components/ui/card.jsx'
 
 const MAX_FILE = 500 * 1024 // 500 KB (localStorage mode; Supabase Storage nanti unlimited)
 export default function Chat() {
@@ -56,12 +60,12 @@ export default function Chat() {
   return (
     <div className="p-4 md:p-7 max-w-3xl mx-auto pb-6">
       <h1 className="font-disp text-lg md:text-xl font-extrabold mb-5">💬 Chat Tim</h1>
-      <div className="card p-4 h-[55vh] overflow-y-auto mb-3 space-y-3">
+      <Card className="p-4 h-[55vh] overflow-y-auto mb-3 space-y-3">
         {teamMsgs.length===0 && teamPolls.length===0 && <p className="text-inksoft text-[13px] text-center py-10">Belum ada pesan. Mulai percakapan! 👋</p>}
         {teamMsgs.map(m=>(
           <div key={m.id} className={'flex flex-col '+(m.userId===user.id?'items-end':'items-start')}>
             {m.userId!==user.id && <span className="text-[11px] font-bold text-inksoft mb-0.5">{m.name}</span>}
-            <div className={'max-w-[80%] rounded-2xl px-4 py-2.5 text-[13.5px] '+(m.userId===user.id?'bg-blue text-white rounded-br-md':'bg-paper border border-line rounded-bl-md')}>
+            <div className={'max-w-[80%] rounded-2xl px-4 py-2.5 text-[13.5px] '+(m.userId===user.id?'bg-blue text-white rounded-br-md':'bg-card2/60 border border-line rounded-bl-md')}>
               {m.text && <p className="whitespace-pre-wrap">{m.text}</p>}
               {m.file && <a href={m.file.data} download={m.file.name} className={'mt-1.5 flex items-center gap-2 rounded-xl px-3 py-2 font-semibold text-[12.5px] '+(m.userId===user.id?'bg-white/15 underline':'bg-white border border-line text-blue-dark')}>
                 📎 {m.file.name} <span className="opacity-70">({Math.round((m.file.data.length*0.75)/1024)} KB)</span>
@@ -73,10 +77,10 @@ export default function Chat() {
         {teamPolls.map(p=>{
           const totalVotes = Object.keys(p.votes).length
           return (
-            <div key={p.id} className="max-w-[85%] card p-4 mx-auto w-full">
+            <Card key={p.id} className="max-w-[85%] p-4 mx-auto w-full">
               <div className="flex items-center gap-2">
-                <span className="pill bg-violet-soft text-violet">🗳️ Voting</span>
-                {p.closed && <span className="pill bg-line text-inksoft">Ditutup</span>}
+                <Badge variant="violet">🗳️ Voting</Badge>
+                {p.closed && <Badge variant="secondary">Ditutup</Badge>}
                 <span className="text-[11px] text-inksoft ml-auto">{p.by}</span>
               </div>
               <b className="text-[14px] block mt-2">{p.q}</b>
@@ -97,38 +101,35 @@ export default function Chat() {
               </div>
               <div className="text-[11px] text-inksoft mt-2 flex items-center">
                 {totalVotes} suara
-                {!p.closed && p.by===user.name && <button onClick={()=>closePoll(p.id)} className="ml-auto pill bg-line text-inksoft hover:bg-red-soft">Tutup voting</button>}
+                {!p.closed && p.by===user.name && <Button onClick={()=>closePoll(p.id)} variant="ghost" className="ml-auto rounded-full h-6 px-2.5 text-[10px] hover:bg-red-soft hover:text-red">Tutup voting</Button>}
               </div>
-            </div>
+            </Card>
           )
         })}
         <div ref={bottomRef}/>
-      </div>
+      </Card>
 
       <form onSubmit={send} className="card p-3">
         {pollMode ? (
           <div className="p-2 space-y-2">
-            <input value={pollQ} onChange={e=>setPollQ(e.target.value)} placeholder="Pertanyaan voting…"
-              className="w-full border border-line rounded-xl px-3.5 py-2.5 text-[13.5px] font-semibold"/>
+            <Input value={pollQ} onChange={e=>setPollQ(e.target.value)} placeholder="Pertanyaan voting…" className="font-semibold"/>
             {pollOpts.map((o,i)=>(
-              <input key={i} value={o} onChange={e=>setPollOpts(pollOpts.map((x,j)=>j===i?e.target.value:x))} placeholder={`Pilihan ${i+1}`}
-                className="w-full border border-line rounded-xl px-3.5 py-2 text-[13px]"/>
+              <Input key={i} value={o} onChange={e=>setPollOpts(pollOpts.map((x,j)=>j===i?e.target.value:x))} placeholder={`Pilihan ${i+1}`}/>
             ))}
             <div className="flex gap-2">
-              <button type="button" onClick={()=>setPollOpts([...pollOpts,''])} className="pill bg-paper border border-line font-bold">+ Pilihan</button>
-              <button type="submit" className="btn-blue px-4 py-1.5 text-[12.5px]">Buat voting</button>
-              <button type="button" onClick={()=>setPollMode(false)} className="pill bg-line text-inksoft ml-auto">Batal</button>
+              <Button type="button" onClick={()=>setPollOpts([...pollOpts,''])} variant="outline" size="sm" className="rounded-full">+ Pilihan</Button>
+              <Button type="submit" size="sm">Buat voting</Button>
+              <Button type="button" onClick={()=>setPollMode(false)} variant="secondary" size="sm" className="rounded-full ml-auto">Batal</Button>
             </div>
           </div>
         ) : (
           <div className="flex items-center gap-2">
-            <button type="button" onClick={()=>setPollMode(true)} title="Buat voting" className="w-9 h-9 rounded-xl bg-violet-soft text-violet font-bold shrink-0">🗳️</button>
-            <label title="Kirim file" className="w-9 h-9 rounded-xl bg-paper border border-line grid place-items-center cursor-pointer shrink-0 hover:border-blue">📎
+            <Button type="button" onClick={()=>setPollMode(true)} title="Buat voting" className="w-9 h-9 rounded-xl bg-violet-soft text-violet hover:bg-violet hover:text-white p-0 shrink-0 shadow-none">🗳️</Button>
+            <label title="Kirim file" className="w-9 h-9 rounded-xl bg-card2 border border-line grid place-items-center cursor-pointer shrink-0 hover:border-blue">📎
               <input id="zk-file" type="file" className="hidden" onChange={e=>setFile(e.target.files[0])}/>
             </label>
-            <input value={text} onChange={e=>setText(e.target.value)} placeholder="Tulis pesan…"
-              className="flex-1 border border-line rounded-xl px-3.5 py-2.5 text-[13.5px]"/>
-            <button className="btn-blue px-4 py-2.5 text-[13px] shrink-0">{file ? '📎 Kirim' : 'Kirim'}</button>
+            <Input value={text} onChange={e=>setText(e.target.value)} placeholder="Tulis pesan…" className="flex-1"/>
+            <Button className="shrink-0">{file ? '📎 Kirim' : 'Kirim'}</Button>
           </div>
         )}
         {file && !pollMode && <div className="text-[11.5px] text-inksoft mt-2 px-1">Lampiran: <b className="text-ink">{file.name}</b> ({Math.round(file.size/1024)} KB)</div>}

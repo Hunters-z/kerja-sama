@@ -1,5 +1,7 @@
 import { useState } from 'react'
-import { loadDB, saveDB, currentUser } from '../lib/db.js'
+import { loadDB, saveDB, currentUser } from '@/lib/db.js'
+import { Button } from '@/components/ui/button.jsx'
+import { Card } from '@/components/ui/card.jsx'
 
 export default function AttendanceMod() {
   const [db, setDb] = useState(loadDB())
@@ -20,13 +22,13 @@ export default function AttendanceMod() {
   return (
     <div className="p-4 md:p-7 max-w-3xl mx-auto">
       <h1 className="font-disp text-lg md:text-xl font-extrabold mb-5">⏰ Absen Hadir</h1>
-      <div className="card p-6 text-center mb-4">
+      <Card className="p-6 text-center mb-4">
         <div className="text-inksoft text-[13px]">{mine ? (mine.out ? 'Absensi hari ini lengkap ✓' : `Masuk ${new Date(mine.in).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})} — tinggal absen pulang`) : 'Belum absen hari ini'}</div>
-        <button onClick={mark} disabled={mine&&mine.out} className="btn-blue w-full py-3.5 mt-3 text-[14px] disabled:opacity-40">
+        <Button onClick={mark} disabled={!!(mine&&mine.out)} className="w-full h-12 mt-3 text-[14px]">
           {mine ? (mine.out ? 'Selesai' : 'Absen Pulang') : 'Absen Masuk'}
-        </button>
-      </div>
-      <div className="card p-5">
+        </Button>
+      </Card>
+      <Card className="p-5">
         <h3 className="font-disp font-bold text-[14px] mb-2">Hadir hari ini ({todayAll.length})</h3>
         {todayAll.map(a=>(
           <div key={a.userId} className="flex gap-2.5 py-2 text-[13.5px] border-b border-line last:border-0">
@@ -35,7 +37,7 @@ export default function AttendanceMod() {
           </div>
         ))}
         {todayAll.length===0 && <p className="text-inksoft text-[13px]">Belum ada yang absen.</p>}
-      </div>
+      </Card>
     </div>
   )
 }

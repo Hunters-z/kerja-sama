@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
-import { loadDB, saveDB, currentUser } from '../lib/db.js'
-import { webauthnSupported, enroll } from '../lib/webauthn.js'
+import { loadDB, saveDB, currentUser } from '@/lib/db.js'
+import { webauthnSupported, enroll } from '@/lib/webauthn.js'
+import { Button } from '@/components/ui/button.jsx'
+import { Card } from '@/components/ui/card.jsx'
+import { Badge } from '@/components/ui/badge.jsx'
 
 export default function Team() {
   const [db, setDb] = useState(loadDB())
@@ -23,15 +26,15 @@ export default function Team() {
   return (
     <div className="p-4 md:p-7 max-w-4xl mx-auto">
       <h1 className="font-disp text-lg md:text-xl font-extrabold mb-5">Tim</h1>
-      {msg && <div className="card p-3.5 mb-4 text-[13px] font-bold">{msg}</div>}
-      <div className="card p-5 mb-4 flex flex-wrap items-center gap-3">
+      {msg && <Card className="p-3.5 mb-4 text-[13px] font-bold">{msg}</Card>}
+      <Card className="p-5 mb-4 flex flex-wrap items-center gap-3">
         <div>
           <div className="text-[11.5px] font-bold text-inksoft uppercase">ID Tim (bagikan ke anggota)</div>
           <div className="font-disp text-2xl font-extrabold text-blue tracking-wider">{team?.id}</div>
         </div>
-        {user.role==='admin' && <button onClick={regenTeamId} className="pill bg-line text-inksoft hover:bg-blue-soft hover:text-blue-dark ml-auto font-bold">Regenerate ID</button>}
-      </div>
-      <div className="card p-5">
+        {user.role==='admin' && <Button onClick={regenTeamId} variant="secondary" size="sm" className="rounded-full ml-auto">Regenerate ID</Button>}
+      </Card>
+      <Card className="p-5">
         <h3 className="font-disp font-bold text-[14px] mb-3">Anggota ({members.filter(m=>m.status==='active').length} aktif)</h3>
         {members.map(m=>(
           <div key={m.id} className="flex items-center gap-3 py-2.5 border-b border-line last:border-0 text-[13.5px]">
@@ -39,21 +42,21 @@ export default function Team() {
             <div><b>{m.name}</b><div className="text-[11.5px] text-inksoft">@{m.username} · {m.role}</div></div>
             <div className="ml-auto flex gap-2">
               {m.status==='pending' ? <>
-                <span className="pill bg-amber-soft text-amber-700">Pending</span>
+                <Badge variant="warning">Pending</Badge>
                 {user.role==='admin' && <>
-                  <button onClick={()=>approve(m.id)} className="pill bg-green-soft text-emerald-700 font-bold">Setujui</button>
-                  <button onClick={()=>reject(m.id)} className="pill bg-red-soft text-red font-bold">Tolak</button>
+                  <Button onClick={()=>approve(m.id)} size="sm" className="rounded-full h-6 px-2.5 text-[10px] bg-green-soft text-emerald-700 hover:bg-green hover:text-white shadow-none">Setujui</Button>
+                  <Button onClick={()=>reject(m.id)} size="sm" className="rounded-full h-6 px-2.5 text-[10px] bg-red-soft text-red hover:bg-red hover:text-white shadow-none">Tolak</Button>
                 </>}
               </> : <>
-                {m.credId && <span className="pill bg-blue-soft text-blue-dark">👆 Fingerprint</span>}
-                <span className="pill bg-green-soft text-emerald-700">Aktif</span>
+                {m.credId && <Badge>👆 Fingerprint</Badge>}
+                <Badge variant="success">Aktif</Badge>
               </>}
             </div>
           </div>
         ))}
-      </div>
+      </Card>
       {webauthnSupported() && (
-        <button onClick={doEnroll} className="btn-blue w-full py-3 mt-4">👆 Daftarkan fingerprint untuk akun ini</button>
+        <Button onClick={doEnroll} className="w-full h-12 mt-4">👆 Daftarkan fingerprint untuk akun ini</Button>
       )}
     </div>
   )

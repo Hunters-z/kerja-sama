@@ -1,10 +1,14 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { login, register, loadDB, saveDB } from '../lib/db.js'
-import { webauthnSupported, enroll, verify } from '../lib/webauthn.js'
+import { login, register, loadDB, saveDB } from '@/lib/db.js'
+import { webauthnSupported, enroll, verify } from '@/lib/webauthn.js'
+import { Button } from '@/components/ui/button.jsx'
+import { Input } from '@/components/ui/input.jsx'
+import { Label } from '@/components/ui/label.jsx'
+import { Badge } from '@/components/ui/badge.jsx'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs.jsx'
 
 export default function Login() {
-  const [tab, setTab] = useState('login')
   const [form, setForm] = useState({username:'', password:'', name:'', teamId:''})
   const [err, setErr] = useState('')
   const [fpMsg, setFpMsg] = useState('')
@@ -52,39 +56,41 @@ export default function Login() {
           <p className="text-white/80 mt-4 max-w-md">Tugas harian, deadline, dan laporan lapangan — semua tersinkron dalam satu tempat. Dibuat untuk mandor, surveior, dan tim lapangan Indonesia.</p>
         </div>
         <div className="space-y-3">
-          <Card title="Review laporan mingguan" badge="On Progress" tone="bg-amber-soft text-amber-700"/>
-          <Card title="Sinkronisasi tim selesai" badge="Done" tone="bg-green-soft text-emerald-700"/>
-          <Card title="Deadline tugas lapangan" badge="Hari ini" tone="bg-red-soft text-red"/>
+          <Card title="Review laporan mingguan" badge="On Progress" tone="warning"/>
+          <Card title="Sinkronisasi tim selesai" badge="Done" tone="success"/>
+          <Card title="Deadline tugas lapangan" badge="Hari ini" tone="destructive"/>
         </div>
       </div>
       {/* Panel kanan: form */}
       <div className="flex flex-col items-center justify-center p-6">
         <div className="w-full max-w-sm">
-          <div className="font-disp font-extrabold text-xl mb-1 lg:hidden">Kerja<span className="text-blue">Sama</span></div>
-          <div className="flex gap-1 bg-line/60 p-1 rounded-xl mb-5">
-            {['login','daftar'].map(t=>(
-              <button key={t} onClick={()=>{setTab(t); setErr('')}} className={'flex-1 py-2 rounded-lg text-[13px] font-bold transition '+(tab===t?'bg-white shadow-soft text-ink':'text-inksoft')}>{t==='login'?'Masuk':'Daftar'}</button>
-            ))}
-          </div>
-          {err && <div className="mb-4 text-[13px] font-bold text-red bg-red-soft p-3 rounded-xl">{err}</div>}
-          {tab==='login' ? (
-            <form onSubmit={doLogin} className="space-y-3">
-              <Field label="Username" value={form.username} onChange={v=>setForm({...form,username:v})}/>
-              <Field label="Password" type="password" value={form.password} onChange={v=>setForm({...form,password:v})}/>
-              <button className="btn-blue w-full py-3">Masuk →</button>
-            </form>
-          ) : (
-            <form onSubmit={doRegister} className="space-y-3">
-              <Field label="Nama lengkap" value={form.name} onChange={v=>setForm({...form,name:v})}/>
-              <Field label="Username" value={form.username} onChange={v=>setForm({...form,username:v})}/>
-              <Field label="Password" type="password" value={form.password} onChange={v=>setForm({...form,password:v})}/>
-              <Field label="ID Tim (kosongkan = buat tim baru)" value={form.teamId} onChange={v=>setForm({...form,teamId:v})}/>
-              <button className="btn-blue w-full py-3">Daftar →</button>
-            </form>
-          )}
+          <div className="font-disp font-extrabold text-xl mb-4 lg:hidden">Kerja<span className="text-blue">Sama</span></div>
+          <Tabs defaultValue="login">
+            <TabsList className="w-full mb-2">
+              <TabsTrigger value="login" className="flex-1" onClick={()=>setErr('')}>Masuk</TabsTrigger>
+              <TabsTrigger value="daftar" className="flex-1" onClick={()=>setErr('')}>Daftar</TabsTrigger>
+            </TabsList>
+            {err && <div className="mb-4 text-[13px] font-bold text-red bg-red-soft p-3 rounded-xl">{err}</div>}
+            <TabsContent value="login">
+              <form onSubmit={doLogin} className="space-y-3">
+                <Field label="Username" value={form.username} onChange={v=>setForm({...form,username:v})}/>
+                <Field label="Password" type="password" value={form.password} onChange={v=>setForm({...form,password:v})}/>
+                <Button type="submit" className="w-full h-12">Masuk →</Button>
+              </form>
+            </TabsContent>
+            <TabsContent value="daftar">
+              <form onSubmit={doRegister} className="space-y-3">
+                <Field label="Nama lengkap" value={form.name} onChange={v=>setForm({...form,name:v})}/>
+                <Field label="Username" value={form.username} onChange={v=>setForm({...form,username:v})}/>
+                <Field label="Password" type="password" value={form.password} onChange={v=>setForm({...form,password:v})}/>
+                <Field label="ID Tim (kosongkan = buat tim baru)" value={form.teamId} onChange={v=>setForm({...form,teamId:v})}/>
+                <Button type="submit" className="w-full h-12">Daftar →</Button>
+              </form>
+            </TabsContent>
+          </Tabs>
           <div className="flex items-center gap-3 text-[11px] text-inksoft my-4"><div className="flex-1 border-t border-line"/>atau<div className="flex-1 border-t border-line"/></div>
           {webauthnSupported() && <>
-            <button onClick={fpLogin} className="w-full card py-3 font-bold text-[14px] hover:border-blue transition">👆 Masuk dengan Fingerprint</button>
+            <Button onClick={fpLogin} variant="outline" className="w-full h-12">👆 Masuk dengan Fingerprint</Button>
             <button onClick={fpEnroll} className="w-full mt-2 text-[12px] text-inksoft hover:text-blue font-semibold py-1">Daftarkan fingerprint di perangkat ini</button>
             {fpMsg && <p className="text-[12px] text-center mt-2 font-semibold text-blue-dark">{fpMsg}</p>}
           </>}
@@ -101,12 +107,12 @@ function Card({title,badge,tone}) {
   return <div className="bg-white/10 backdrop-blur rounded-2xl px-5 py-4 flex items-center gap-3">
     <div className="w-9 h-9 rounded-full bg-white/20"/>
     <div className="font-semibold text-[14px]">{title}</div>
-    <span className={'ml-auto pill '+tone}>{badge}</span>
+    <Badge variant={tone} className="ml-auto">{badge}</Badge>
   </div>
 }
 export function Field({label,type='text',value,onChange}) {
   return <label className="block">
-    <span className="text-[11.5px] font-bold text-inksoft uppercase tracking-wide">{label}</span>
-    <input type={type} value={value} onChange={e=>onChange(e.target.value)} className="w-full border border-line rounded-xl px-3.5 py-2.5 mt-1 text-[14px] focus:border-blue outline-none bg-white"/>
+    <Label className="block uppercase tracking-wide">{label}</Label>
+    <Input type={type} value={value} onChange={e=>onChange(e.target.value)} className="mt-1 h-11 text-[14px]"/>
   </label>
 }
