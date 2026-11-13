@@ -7,7 +7,15 @@ Manajemen tim lapangan: tugas kanban, laporan, tim dengan ID undangan + approval
 - 👥 Sistem tim: ID Tim undangan, approval anggota oleh admin
 - ✅ Kanban tugas (To Do / On Progress / Done), deadline, penugasan anggota
 - 📝 Laporan lapangan per tim
+- 💬 Chat tim: pesan, voting dengan hasil %, kirim lampiran file (≤500KB)
+- 🧩 **Toko Fitur** — modul opsional aktif/nonaktif per tim:
+  - Pengumuman
+  - Absen (fingerprint + PIN)
+  - Inventori
+  - Pengeluaran
 - 📱 Responsif penuh + PWA-ready
+- 🎨 **UI shadcn/ui dark premium** (FinPoint: hitam #111, kartu #1A1D24, radius 20px, oranye #F97316)
+- 🔷 **Ikon minimalis Lucide** (0 emoji di `src/`)
 
 ## Demo lokal
 ```bash

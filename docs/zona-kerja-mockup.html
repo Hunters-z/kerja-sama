@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zona Kerja — Project Kolaborasi</title>
+<style>
+:root{--bg:#111;--card:#1A1D24;--fg:#F5F5F5;--muted:#9BA1AD;--primary:#F97316;--border:rgba(255,255,255,.1);--radius:20px;}
+body{background:var(--bg);color:var(--fg);font-family:sans-serif;margin:0;padding:24px;}
+.mock{max-width:900px;margin:0 auto;background:var(--card);border-radius:var(--radius);padding:40px;border:1px solid var(--border);}
+.nav{display:flex;gap:20px;margin-bottom:30px;border-bottom:1px solid var(--border);padding-bottom:10px;}
+.nav b{color:var(--primary);border-bottom:2px solid var(--primary);padding-bottom:10px;}
+.kanban{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
+.col{background:rgba(0,0,0,.2);padding:15px;border-radius:12px;}
+.card{background:var(--bg);padding:15px;margin-bottom:10px;border-radius:8px;}
+</style>
+</head>
+<body>
+<div class="mock">
+  <h1>Zona Kerja — Project Kolaborasi</h1>
+  <div class="nav"><b>Kanban Tugas</b> <span>Laporan</span> <span>Approval</span> <span>Toko Fitur</span></div>
+  <div class="kanban">
+    <div class="col"><h3>To Do</h3><div class="card">Buat desain login</div><div class="card">Setup DB</div></div>
+    <div class="col"><h3>In Progress</h3><div class="card">Integrasi Supabase</div></div>
+    <div class="col"><h3>Done</h3><div class="card">Setup Repo</div></div>
+  </div>
+</div>
+</body>
+</html>
