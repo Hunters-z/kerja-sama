@@ -5,14 +5,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg:'#F4F6FA', card:'#FFFFFF', card2:'#F1F3F8', line:'#E6E9F0',
-        ink:'#10131A', inksoft:'#5C6470', dim:'#9AA1AD',
-        blue:{DEFAULT:'#2563EB',dark:'#1D4ED8',soft:'#EAF0FE'},
-        green:{DEFAULT:'#16A34A',soft:'#E8F7EE'},
+        // legacy aliases (masih dipakai beberapa modul)
+        bg:'#FAFAFA', card:'#FFFFFF', card2:'#F4F4F5', line:'#E4E4E7',
+        ink:'#18181B', inksoft:'#52525B', dim:'#A1A1AA',
+        blue:{DEFAULT:'#4F46E5',dark:'#4338CA',soft:'#EEF0FB'},
+        green:{DEFAULT:'#16A34A',soft:'#ECFDF3'},
         gold:{DEFAULT:'#D97706',soft:'#FEF3E2'},
         amber:{DEFAULT:'#D97706',soft:'#FEF3E2'},
         red:{DEFAULT:'#DC2626',soft:'#FDECEC'},
-        violet:{DEFAULT:'#7C3AED',soft:'#F1EBFE'},
+        violet:{DEFAULT:'#4F46E5',soft:'#EEF0FB'},
+        // palet editorial Kerja Sama
+        canvas:'#FAFAFA', surface:'#FFFFFF', subtle:'#F4F4F5', hairline:'#E4E4E7',
+        indigo2:'#4F46E5',
         border:'hsl(var(--border))',
         input:'hsl(var(--input))',
         ring:'hsl(var(--ring))',
@@ -25,19 +29,20 @@ export default {
         accent:{ DEFAULT:'hsl(var(--accent))', foreground:'hsl(var(--accent-foreground))' },
         popover:{ DEFAULT:'hsl(var(--popover))', foreground:'hsl(var(--popover-foreground))' },
       },
-      fontFamily: { disp:['Sora','sans-serif'], body:['"Plus Jakarta Sans"','sans-serif'] },
-      boxShadow: { soft:'0 2px 12px rgba(16,19,26,.06)', pop:'0 10px 30px rgba(37,99,235,.18)' },
+      fontFamily: { sans:['Inter','-apple-system','sans-serif'], disp:['Inter','sans-serif'], body:['Inter','sans-serif'], mono:['"JetBrains Mono"','monospace'] },
+      boxShadow: {
+        hairline:'0 1px 2px 0 rgba(24, 24, 27, 0.03)',
+        float:'0 12px 32px -4px rgba(24, 24, 27, 0.08), 0 0 0 1px rgba(228, 228, 231, 0.8)',
+        soft:'0 1px 2px 0 rgba(24, 24, 27, 0.03)',
+        pop:'0 12px 32px -4px rgba(24,24,27,.14)',
+      },
       borderRadius: { lg:'var(--radius)', md:'calc(var(--radius) - 2px)', sm:'calc(var(--radius) - 4px)' },
       keyframes: {
-        'accordion-down': { from:{height:0}, to:{height:'var(--radix-accordion-content-height)'} },
-        'accordion-up': { from:{height:'var(--radix-accordion-content-height)'}, to:{height:0} },
         'overlay-in': { from:{opacity:0}, to:{opacity:1} },
         'content-in': { from:{opacity:0,transform:'translate(-50%,-48%) scale(.96)'}, to:{opacity:1,transform:'translate(-50%,-50%) scale(1)'} },
         'pop-in': { from:{opacity:0,transform:'scale(.95)'}, to:{opacity:1,transform:'scale(1)'} },
       },
       animation: {
-        'accordion-down':'accordion-down .2s ease-out',
-        'accordion-up':'accordion-up .2s ease-out',
         'overlay-in':'overlay-in .15s ease-out',
         'content-in':'content-in .18s ease-out',
         'pop-in':'pop-in .12s ease-out',

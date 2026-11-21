@@ -2,6 +2,10 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import Login from './pages/Login.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import Tasks from './pages/Tasks.jsx'
+import Projects from './pages/Projects.jsx'
+import Documents from './pages/Documents.jsx'
+import Voting from './pages/Voting.jsx'
+import Extras from './pages/Extras.jsx'
 import Reports from './pages/Reports.jsx'
 import Team from './pages/Team.jsx'
 import Features from './pages/Features.jsx'
@@ -24,6 +28,10 @@ export default function App() {
       <Route element={<Guard><Shell/></Guard>}>
         <Route path="/" element={<Dashboard/>}/>
         <Route path="/tugas" element={<Tasks/>}/>
+        <Route path="/proyek" element={<Projects/>}/>
+        <Route path="/dokumen" element={<Documents/>}/>
+        <Route path="/voting" element={<Voting/>}/>
+        <Route path="/lainnya" element={<Extras/>}/>
         <Route path="/laporan" element={<Reports/>}/>
         <Route path="/tim" element={<Team/>}/>
         <Route path="/fitur" element={<Features/>}/>
