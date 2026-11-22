@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { loadDB, currentUser } from '@/lib/db.js'
+import { supabase, getCurrentUser } from '@/lib/supabase'
 import { Card } from '@/components/ui/card.jsx'
 import { TrendingUp, ArrowRight, CalendarDays, BellRing, Vote, FolderKanban, FileText, Pin } from 'lucide-react'
 
@@ -25,25 +25,52 @@ export function taskPct(t) {
 const pct = t => taskPct(t)
 
 export default function Dashboard() {
-  const [db, setDb] = useState(loadDB())
-  const user = currentUser()
-  const [tick, setTick] = useState(0)
-  useEffect(()=>{ const t=setInterval(()=>setDb(loadDB()),2500); return ()=>clearInterval(t) },[])
+  const [user, setUser] = useState(null)
+  const [tasks, setTasks] = useState([])
+  const [projects, setProjects] = useState([])
+  const [docs, setDocs] = useState([])
+  const [polls, setPolls] = useState([])
+  const [users, setUsers] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function load() {
+      const u = await getCurrentUser()
+      setUser(u)
+      if (u) {
+        const p = new Date().toISOString().slice(0,10)
+        const pWeek = new Date(Date.now()+7*864e5).toISOString().slice(0,10)
+        
+        const { data: t } = await supabase.from('tasks').select('*').eq('team_id', u.team_id)
+        const { data: pjs } = await supabase.from('projects').select('*').eq('team_id', u.team_id)
+        const { data: dcs } = await supabase.from('docs').select('*').eq('team_id', u.team_id)
+        const { data: pls } = await supabase.from('polls').select('*').eq('team_id', u.team_id)
+        const { data: us } = await supabase.from('users').select('*').eq('team_id', u.team_id)
+        
+        setTasks(t || [])
+        setProjects(pjs || [])
+        setDocs(dcs || [])
+        setPolls(pls || [])
+        setUsers(us || [])
+      }
+      setLoading(false)
+    }
+    load()
+  }, [])
+
+  if (loading) return <div className="p-8 text-sm text-zinc-400">Memuat data dari Supabase...</div>
   if (!user) return null
-  const team = db.teams.find(t=>t.id===user.teamId)
-  const tasks = db.tasks.filter(t=>t.teamId===user.teamId)
-  const mine = tasks.filter(t=>t.assignee===user.id)
+
   const today = new Date().toISOString().slice(0,10)
+  const team = null // Data team tidak di-mapping langsung di dashboard jika tidak ada di DB
   const due = tasks.filter(t=>t.deadline && t.deadline<=today && t.status!=='Done')
   const upcoming = tasks.filter(t=>t.deadline && t.deadline>today && t.deadline<=new Date(Date.now()+7*864e5).toISOString().slice(0,10) && t.status!=='Done')
   const pinned = tasks.filter(t=>t.pinned && t.status!=='Done')
   const done = tasks.filter(t=>t.status==='Done').length
-  const wsum = tasks.reduce((a,t)=>a+pct(t),0)
+  const wsum = tasks.reduce((a,t)=>a+taskPct(t),0)
   const overall = tasks.length ? Math.round(wsum/tasks.length) : 0
   const dateStr = new Intl.DateTimeFormat('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date())
-  const docs = (db.docs||[]).filter(d=>d.teamId===user.teamId)
-  const polls = db.polls.filter(p=>p.teamId===user.teamId)
-  const nameOf = id => db.users.find(u=>u.id===id)?.name || '—'
+  const nameOf = id => users.find(u=>u.id===id)?.name || '—'
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8 space-y-6">
