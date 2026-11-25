@@ -93,9 +93,9 @@ alter table messages enable row level security;
 alter table polls enable row level security;
 alter table activity enable row level security;
 
-create policy "team access" on teams for select using (true);
-create policy "user access" on users for select using (true);
-create policy "tasks access" on tasks for select using (true);
+create policy "team access" on teams for select using (exists (select 1 from users where users.id = auth.uid() and users.team_id = teams.id));
+create policy "user access" on users for select using (exists (select 1 from users u2 where u2.id = auth.uid() and u2.team_id = users.team_id));
+create policy "tasks access" on tasks for select using (exists (select 1 from users u3 where u3.id = auth.uid() and u3.team_id = tasks.team_id));
 create policy "projects access" on projects for select using (true);
 create policy "docs access" on docs for select using (true);
 create policy "snippets access" on snippets for select using (true);

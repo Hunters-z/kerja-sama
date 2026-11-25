@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { supabase, getCurrentUser } from '@/lib/supabase'
+import { Link, useNavigate } from 'react-router-dom'
+import { supabase, getCurrentUser, seedDemoData } from '@/lib/supabase'
 import { Card } from '@/components/ui/card.jsx'
-import { TrendingUp, ArrowRight, CalendarDays, BellRing, Vote, FolderKanban, FileText, Pin } from 'lucide-react'
+import { TrendingUp, ArrowRight, CalendarDays, BellRing, Vote, FolderKanban, FileText, Pin, Users, MessageSquare, PlusCircle } from 'lucide-react'
 
 export function StatusPill({s}) {
   const map = {'To Do':'bg-subtle text-inksoft','On Progress':'bg-indigo-50 text-indigo-700','Review':'bg-amber-50 text-amber-700','Done':'bg-emerald-50 text-emerald-700'}
@@ -25,6 +25,7 @@ export function taskPct(t) {
 const pct = t => taskPct(t)
 
 export default function Dashboard() {
+  const navigate = useNavigate()
   const [user, setUser] = useState(null)
   const [tasks, setTasks] = useState([])
   const [projects, setProjects] = useState([])
@@ -37,29 +38,64 @@ export default function Dashboard() {
     async function load() {
       const u = await getCurrentUser()
       setUser(u)
-      if (u) {
-        const p = new Date().toISOString().slice(0,10)
-        const pWeek = new Date(Date.now()+7*864e5).toISOString().slice(0,10)
-        
-        const { data: t } = await supabase.from('tasks').select('*').eq('team_id', u.team_id)
-        const { data: pjs } = await supabase.from('projects').select('*').eq('team_id', u.team_id)
-        const { data: dcs } = await supabase.from('docs').select('*').eq('team_id', u.team_id)
-        const { data: pls } = await supabase.from('polls').select('*').eq('team_id', u.team_id)
-        const { data: us } = await supabase.from('users').select('*').eq('team_id', u.team_id)
-        
-        setTasks(t || [])
-        setProjects(pjs || [])
-        setDocs(dcs || [])
-        setPolls(pls || [])
-        setUsers(us || [])
+      
+      // Jika belum login, arahkan ke halaman login
+      if (!u) {
+        setLoading(false)
+        return
       }
+
+      const p = new Date().toISOString().slice(0,10)
+      const pWeek = new Date(Date.now()+7*864e5).toISOString().slice(0,10)
+      
+      const { data: t } = await supabase.from('tasks').select('*').eq('team_id', u.team_id)
+      const { data: pjs } = await supabase.from('projects').select('*').eq('team_id', u.team_id)
+      const { data: dcs } = await supabase.from('docs').select('*').eq('team_id', u.team_id)
+      const { data: pls } = await supabase.from('polls').select('*').eq('team_id', u.team_id)
+      const { data: us } = await supabase.from('users').select('*').eq('team_id', u.team_id)
+      
+      setTasks(t || [])
+      setProjects(pjs || [])
+      setDocs(dcs || [])
+      setPolls(pls || [])
+      setUsers(us || [])
+      
+      // Jika belum ada data, seed demo
+      if ((t?.length || 0) === 0 && u.team_id) {
+        await seedDemoData(u.team_id)
+        window.location.reload()
+      }
+      
       setLoading(false)
     }
     load()
   }, [])
 
   if (loading) return <div className="p-8 text-sm text-zinc-400">Memuat data dari Supabase...</div>
-  if (!user) return null
+  
+  // Jika belum login, tampilkan halaman selamat datang + tombol login
+  if (!user) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="text-center space-y-4 max-w-md px-4">
+          <div className="mx-auto w-16 h-16 rounded-full bg-indigo-50 flex items-center justify-center">
+            <Users className="w-8 h-8 text-indigo-600" strokeWidth={1.5} />
+          </div>
+          <h2 className="text-xl font-semibold text-ink dark:text-white">Selamat Datang di Zona Kerja</h2>
+          <p className="text-sm text-inksoft dark:text-zinc-400">
+            Silakan masuk atau daftar akun untuk memulai mengelola proyek dan tugas tim Anda.
+          </p>
+          <button 
+            onClick={() => navigate('/login')}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium transition"
+          >
+            <PlusCircle className="w-4 h-4" strokeWidth={2} />
+            Masuk Sekarang
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   const today = new Date().toISOString().slice(0,10)
   const team = null // Data team tidak di-mapping langsung di dashboard jika tidak ada di DB
