@@ -17,8 +17,8 @@ import Chat from './pages/Chat.jsx'
 import Shell from './components/Shell.jsx'
 
 function Guard({children}) {
-  const id = localStorage.getItem('zona_kerja_db_v1')
-  const ok = id && JSON.parse(id).session
+  const id = localStorage.getItem('zona_kerja_db_v1') || localStorage.getItem('zona_kerja_session_v1')
+  const ok = id ? (id.startsWith('{') ? JSON.parse(id).session : !!localStorage.getItem('zona_kerja_session_v1')) : false
   return ok ? children : <Navigate to="/login" replace/>
 }
 export default function App() {
