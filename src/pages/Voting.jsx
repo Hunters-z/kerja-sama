@@ -61,12 +61,12 @@ export default function Voting() {
                   const pc = total?Math.round(count/total*100):0
                   return (
                     <button key={i} disabled={p.closed} onClick={()=>vote(p.id,i)}
-                      className={'relative w-full overflow-hidden rounded-lg border bg-canvas p-2.5 text-left transition hover:border-zinc-400 disabled:cursor-default dark:bg-zinc-950/50 '+(mine===i?'border-indigo-400':'border-line dark:border-zinc-800')}>
-                      {total>0 && <div className="absolute inset-y-0 left-0 bg-indigo-500/10 transition-all duration-300" style={{width:pc+'%'}}/>}
+                      className={'relative w-full overflow-hidden rounded-lg border bg-canvas p-2.5 text-left transition hover:border-zinc-400 disabled:cursor-default dark:bg-zinc-950/50 '+(mine===i?'border-zinc-400':'border-line dark:border-zinc-800')}>
+                      {total>0 && <div className="absolute inset-y-0 left-0 bg-zinc-500/10 transition-all duration-300" style={{width:pc+'%'}}/>}
                       <div className="relative flex items-center justify-between gap-2 text-xs">
                         <span className="flex items-center gap-2 font-medium text-ink dark:text-zinc-100">
                           {mine===i
-                            ? <svg className="h-3.5 w-3.5 text-indigo-600 shrink-0" strokeWidth={1.5} viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                            ? <svg className="h-3.5 w-3.5 text-zinc-600 shrink-0" strokeWidth={1.5} viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
                             : <span className="h-3.5 w-3.5 rounded-full border border-dim shrink-0"/>}
                           {o}
                         </span>

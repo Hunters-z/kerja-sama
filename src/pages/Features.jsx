@@ -26,7 +26,7 @@ export default function Features() {
       <div className="grid md:grid-cols-2 gap-3.5">
         {CATALOG.map(f=>(
           <Card key={f.key} className={'p-5 flex gap-3.5 '+(db.features[f.key]?'ring-2 ring-blue/40':'')}>
-            <div className="w-11 h-11 rounded-xl bg-blue-soft grid place-items-center text-xl shrink-0">{f.icon}</div>
+            <div className="w-11 h-11 rounded-xl bg-zinc-soft grid place-items-center text-xl shrink-0">{f.icon}</div>
             <div className="min-w-0">
               <b className="text-[14.5px]">{f.name}</b>
               <p className="text-[12.5px] text-inksoft mt-0.5">{f.desc}</p>

@@ -71,7 +71,7 @@ export default function Chat() {
         <div className="flex items-center justify-between border-b border-line dark:border-zinc-800 pb-4">
           <div>
             <div className="flex items-center gap-2">
-              <MessageCircle className="w-5 h-5 text-indigo-600 dark:text-indigo-400" strokeWidth={1.5} />
+              <MessageCircle className="w-5 h-5 text-zinc-600 dark:text-zinc-400" strokeWidth={1.5} />
               <h1 className="text-lg font-semibold text-ink dark:text-white">Diskusi Tim</h1>
             </div>
             <p className="text-[11px] text-dim dark:text-zinc-500 mt-0.5">Ruang percakapan & keputusan kolektif</p>
@@ -86,10 +86,10 @@ export default function Chat() {
         </div>
 
         {/* Pinned message */}
-        {pinned && <div className="flex items-center justify-between gap-2 rounded-lg border border-indigo-200 dark:border-indigo-500/30 bg-indigo-50/50 dark:bg-indigo-500/10 px-4 py-2 text-[11px] mt-3">
+        {pinned && <div className="flex items-center justify-between gap-2 rounded-lg border border-zinc-200 dark:border-zinc-500/30 bg-zinc-50/50 dark:bg-zinc-500/10 px-4 py-2 text-[11px] mt-3">
           <div className="flex items-center gap-2 min-w-0">
-            <Pin className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" strokeWidth={2} />
-            <span className="font-medium text-indigo-900 dark:text-indigo-300 shrink-0">Disematkan:</span>
+            <Pin className="w-3.5 h-3.5 text-zinc-600 dark:text-zinc-400 shrink-0" strokeWidth={2} />
+            <span className="font-medium text-zinc-900 dark:text-zinc-300 shrink-0">Disematkan:</span>
             <span className="truncate text-inksoft dark:text-zinc-400">{pinned.text}</span>
           </div>
           <button onClick={() => setPinned(null)} className="text-dim dark:text-zinc-500 hover:text-ink dark:hover:text-zinc-200 font-bold">✕</button>
@@ -121,7 +121,7 @@ export default function Chat() {
                     <span className={'text-[10px] font-mono ' + (isMe ? 'opacity-60' : 'text-dim dark:text-zinc-500')}>{time(m.at)}</span>
                     <div className="flex items-center gap-2.5">
                       <button onClick={() => setReplyTo(m)} title="Balas" className={'opacity-70 hover:opacity-100 ' + (isMe ? 'text-white dark:text-zinc-900' : '')}><Reply className="w-3.5 h-3.5" strokeWidth={1.5} /></button>
-                      <button onClick={() => pinMsg(m)} title="Sematkan" className={'opacity-70 hover:opacity-100 ' + ((pinned?.id === m.id && 'text-indigo-400 !opacity-100') || (isMe ? 'text-white dark:text-zinc-900' : ''))}><Pin className="w-3.5 h-3.5" strokeWidth={1.5} /></button>
+                      <button onClick={() => pinMsg(m)} title="Sematkan" className={'opacity-70 hover:opacity-100 ' + ((pinned?.id === m.id && 'text-zinc-400 !opacity-100') || (isMe ? 'text-white dark:text-zinc-900' : ''))}><Pin className="w-3.5 h-3.5" strokeWidth={1.5} /></button>
                       <button onClick={() => toTask(m)} title="Jadikan tugas" className={'opacity-70 hover:opacity-100 ' + (isMe ? 'text-white dark:text-zinc-900' : '')}><BellPlus className="w-3.5 h-3.5" strokeWidth={1.5} /></button>
                     </div>
                   </div>
@@ -136,7 +136,7 @@ export default function Chat() {
               <div key={p.id} className="mx-auto w-full max-w-md rounded-2xl border border-line dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 shadow-sm">
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 dark:bg-indigo-500/10 px-2.5 py-1 text-[10px] font-bold text-indigo-700 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-500/20">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-zinc-50 dark:bg-zinc-500/10 px-2.5 py-1 text-[10px] font-bold text-zinc-700 dark:text-zinc-400 border border-zinc-100 dark:border-zinc-500/20">
                       <Vote className="w-3 h-3" strokeWidth={1.5} />Voting
                     </span>
                     {p.closed && <span className="rounded-full bg-subtle dark:bg-zinc-800 px-2.5 py-0.5 text-[10px] font-medium text-inksoft dark:text-zinc-400">Ditutup</span>}
@@ -152,10 +152,10 @@ export default function Chat() {
                     return (
                       <button key={i} disabled={p.closed} onClick={() => votePoll(p.id, i)}
                         className={'relative w-full text-left rounded-xl border px-3.5 py-2.5 text-[13px] font-semibold overflow-hidden transition flex items-center justify-between gap-2 ' +
-                          (mine ? 'border-indigo-400 dark:border-indigo-500 bg-indigo-50/50 dark:bg-indigo-500/10' : 'border-line dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-600 disabled:opacity-50')}>
-                        {totalVotes > 0 && <span className={'absolute inset-y-0 left-0 transition-all ' + (mine ? 'bg-indigo-500/15 dark:bg-indigo-500/20' : 'bg-zinc-200 dark:bg-zinc-800')} style={{ width: pc + '%' }} />}
+                          (mine ? 'border-zinc-400 dark:border-zinc-500 bg-zinc-50/50 dark:bg-zinc-500/10' : 'border-line dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-600 disabled:opacity-50')}>
+                        {totalVotes > 0 && <span className={'absolute inset-y-0 left-0 transition-all ' + (mine ? 'bg-zinc-500/15 dark:bg-zinc-500/20' : 'bg-zinc-200 dark:bg-zinc-800')} style={{ width: pc + '%' }} />}
                         <span className="relative flex-1 truncate">{mine ? '✓ ' : ''}{o}</span>
-                        {totalVotes > 0 && <span className={'relative font-mono text-[10px] ' + (mine ? 'text-indigo-600 dark:text-indigo-400' : 'text-dim dark:text-zinc-500')}>{pc}%</span>}
+                        {totalVotes > 0 && <span className={'relative font-mono text-[10px] ' + (mine ? 'text-zinc-600 dark:text-zinc-400' : 'text-dim dark:text-zinc-500')}>{pc}%</span>}
                       </button>
                     )
                   })}
@@ -182,30 +182,30 @@ export default function Chat() {
           {pollMode ? (
             <div className="space-y-2">
               <div className="flex gap-2">
-                <input value={pollQ} onChange={e => setPollQ(e.target.value)} placeholder="Pertanyaan untuk tim..." className="w-full rounded-xl border border-line dark:border-zinc-700 bg-white dark:bg-zinc-900 px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none text-ink dark:text-zinc-100" />
+                <input value={pollQ} onChange={e => setPollQ(e.target.value)} placeholder="Pertanyaan untuk tim..." className="w-full rounded-xl border border-line dark:border-zinc-700 bg-white dark:bg-zinc-900 px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-zinc-500/20 focus:border-zinc-400 dark:focus:border-zinc-500 outline-none text-ink dark:text-zinc-100" />
               </div>
               {pollOpts.map((o, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <span className="text-[11px] font-mono text-dim dark:text-zinc-500 w-4 text-center">{i + 1}.</span>
-                  <input value={o} onChange={e => setPollOpts(pollOpts.map((x, j) => j === i ? e.target.value : x))} placeholder={'Pilihan ' + (i + 1)} className="flex-1 rounded-lg border border-line dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-[13px] focus:ring-1 focus:ring-indigo-500/20 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none text-ink dark:text-zinc-100" />
+                  <input value={o} onChange={e => setPollOpts(pollOpts.map((x, j) => j === i ? e.target.value : x))} placeholder={'Pilihan ' + (i + 1)} className="flex-1 rounded-lg border border-line dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-[13px] focus:ring-1 focus:ring-zinc-500/20 focus:border-zinc-400 dark:focus:border-zinc-500 outline-none text-ink dark:text-zinc-100" />
                 </div>
               ))}
               <div className="flex items-center gap-2">
-                <button type="button" onClick={() => setPollOpts([...pollOpts, ''])} className="text-[12px] font-medium text-indigo-600 dark:text-indigo-400 hover:underline">+ Pilihan baru</button>
+                <button type="button" onClick={() => setPollOpts([...pollOpts, ''])} className="text-[12px] font-medium text-zinc-600 dark:text-zinc-400 hover:underline">+ Pilihan baru</button>
                 <button type="button" onClick={() => setPollMode(false)} className="ml-auto text-[12px] font-medium text-dim dark:text-zinc-500 hover:text-ink dark:hover:text-zinc-200">Batal</button>
                 <button type="submit" className="px-4 py-2 rounded-xl bg-ink dark:bg-zinc-100 text-white dark:text-zinc-900 text-xs font-bold hover:opacity-90 transition">Publikasikan</button>
               </div>
             </div>
           ) : (
             <div className="flex items-center gap-2">
-              <button type="button" onClick={() => setPollMode(true)} title="Buat voting" className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-line dark:border-zinc-700 bg-white dark:bg-zinc-900 text-dim dark:text-zinc-400 hover:border-indigo-400 hover:text-indigo-600 transition">
+              <button type="button" onClick={() => setPollMode(true)} title="Buat voting" className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-line dark:border-zinc-700 bg-white dark:bg-zinc-900 text-dim dark:text-zinc-400 hover:border-zinc-400 hover:text-zinc-600 transition">
                 <Vote className="w-4 h-4" strokeWidth={1.5} />
               </button>
-              <label title="Kirim file" className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-line dark:border-zinc-700 bg-white dark:bg-zinc-900 text-dim dark:text-zinc-400 hover:border-indigo-400 cursor-pointer transition">
+              <label title="Kirim file" className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-line dark:border-zinc-700 bg-white dark:bg-zinc-900 text-dim dark:text-zinc-400 hover:border-zinc-400 cursor-pointer transition">
                 <FileText className="w-4 h-4" strokeWidth={1.5} />
                 <input id="zk-file" type="file" className="hidden" onChange={e => setFile(e.target.files[0])} />
               </label>
-              <input value={text} onChange={e => setText(e.target.value)} placeholder="Tulis pesan untuk tim..." className="flex-1 rounded-xl border border-line dark:border-zinc-700 bg-white dark:bg-zinc-900 px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none text-ink dark:text-zinc-100" />
+              <input value={text} onChange={e => setText(e.target.value)} placeholder="Tulis pesan untuk tim..." className="flex-1 rounded-xl border border-line dark:border-zinc-700 bg-white dark:bg-zinc-900 px-4 py-2.5 text-sm focus:ring-2 focus:ring-zinc-500/20 focus:border-zinc-400 dark:focus:border-zinc-500 outline-none text-ink dark:text-zinc-100" />
               <button type="submit" className="px-5 h-10 rounded-xl bg-ink dark:bg-zinc-100 text-white dark:text-zinc-900 text-xs font-bold hover:opacity-90 transition shrink-0">Kirim</button>
             </div>
           )}

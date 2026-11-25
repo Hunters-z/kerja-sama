@@ -28,7 +28,7 @@ export default function Reports() {
       {teamReports.map(r=>(
         <Card key={r.id} className="p-5 mb-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue to-violet text-white grid place-items-center text-[10px] font-bold">{db.users.find(u=>u.id===r.userId)?.name.slice(0,2).toUpperCase()}</div>
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-zinc to-zinc text-white grid place-items-center text-[10px] font-bold">{db.users.find(u=>u.id===r.userId)?.name.slice(0,2).toUpperCase()}</div>
             <b className="text-[14px]">{r.title}</b>
             <span className="ml-auto text-[11.5px] text-inksoft">{new Date(r.at).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span>
           </div>

@@ -49,11 +49,11 @@ export default function Login() {
   return (
     <div className="min-h-screen grid lg:grid-cols-[1.1fr_1fr]">
       {/* Panel kiri: showcase */}
-      <div className="hidden lg:flex flex-col justify-between bg-gradient-to-br from-blue to-violet text-white p-10">
-        <div className="font-disp font-extrabold text-2xl">Kerja<span className="text-white/70">Sama</span></div>
+      <div className="hidden lg:flex flex-col justify-between bg-zinc-900 dark:bg-zinc-950 text-white p-10 border-r border-zinc-800">
+        <div className="font-disp font-extrabold text-2xl tracking-tight">Kerja<span className="text-zinc-500">Sama</span></div>
         <div>
-          <h1 className="font-disp text-4xl font-extrabold leading-tight">Kelola tim lapangan<br/>tanpa ribet.</h1>
-          <p className="text-white/80 mt-4 max-w-md">Tugas harian, deadline, dan laporan lapangan — semua tersinkron dalam satu tempat. Dibuat untuk mandor, surveior, dan tim lapangan Indonesia.</p>
+          <h1 className="font-disp text-4xl font-extrabold leading-tight tracking-tight">Kelola tim lapangan<br/>tanpa ribet.</h1>
+          <p className="text-zinc-400 mt-4 max-w-md text-sm leading-relaxed">Tugas harian, deadline, dan laporan lapangan — semua tersinkron dalam satu tempat. Dibuat untuk mandor, surveior, dan tim lapangan Indonesia.</p>
         </div>
         <div className="space-y-3">
           <Card title="Review laporan mingguan" badge="On Progress" tone="warning"/>
@@ -62,9 +62,9 @@ export default function Login() {
         </div>
       </div>
       {/* Panel kanan: form */}
-      <div className="flex flex-col items-center justify-center p-6">
+      <div className="flex flex-col items-center justify-center p-6 bg-canvas dark:bg-zinc-950">
         <div className="w-full max-w-sm">
-          <div className="font-disp font-extrabold text-xl mb-4 lg:hidden">Kerja<span className="text-blue">Sama</span></div>
+          <div className="font-disp font-extrabold text-xl mb-4 lg:hidden text-ink dark:text-white">Kerja<span className="text-zinc-500">Sama</span></div>
           <Tabs defaultValue="login">
             <TabsList className="w-full mb-2">
               <TabsTrigger value="login" className="flex-1" onClick={()=>setErr('')}>Masuk</TabsTrigger>
@@ -92,7 +92,7 @@ export default function Login() {
           {webauthnSupported() && <>
             <Button onClick={fpLogin} variant="outline" className="w-full h-12">👆 Masuk dengan Fingerprint</Button>
             <button onClick={fpEnroll} className="w-full mt-2 text-[12px] text-inksoft hover:text-blue font-semibold py-1">Daftarkan fingerprint di perangkat ini</button>
-            {fpMsg && <p className="text-[12px] text-center mt-2 font-semibold text-blue-dark">{fpMsg}</p>}
+            {fpMsg && <p className="text-[12px] text-center mt-2 font-semibold text-zinc-dark">{fpMsg}</p>}
           </>}
           <div className="mt-6 card p-3.5 text-[12px] text-inksoft">
             Mode demo — akun tersedia: <b className="text-ink">admin / admin123</b> (admin) · <b className="text-ink">budi / budi123</b> (anggota)
@@ -104,9 +104,9 @@ export default function Login() {
   )
 }
 function Card({title,badge,tone}) {
-  return <div className="bg-white/10 backdrop-blur rounded-2xl px-5 py-4 flex items-center gap-3">
-    <div className="w-9 h-9 rounded-full bg-white/20"/>
-    <div className="font-semibold text-[14px]">{title}</div>
+  return <div className="bg-zinc-800/60 backdrop-blur rounded-2xl p-4 flex items-center gap-3 border border-zinc-700/50">
+    <div className="w-8 h-8 rounded-full bg-zinc-700 flex items-center justify-center text-xs">⚡</div>
+    <div className="font-semibold text-[13px]">{title}</div>
     <Badge variant={tone} className="ml-auto">{badge}</Badge>
   </div>
 }

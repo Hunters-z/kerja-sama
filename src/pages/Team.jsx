@@ -38,7 +38,7 @@ export default function Team() {
         <h3 className="font-disp font-bold text-[14px] mb-3">Anggota ({members.filter(m=>m.status==='active').length} aktif)</h3>
         {members.map(m=>(
           <div key={m.id} className="flex items-center gap-3 py-2.5 border-b border-line last:border-0 text-[13.5px]">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue to-violet text-white grid place-items-center text-[11px] font-bold">{m.name.slice(0,2).toUpperCase()}</div>
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-zinc to-zinc text-white grid place-items-center text-[11px] font-bold">{m.name.slice(0,2).toUpperCase()}</div>
             <div><b>{m.name}</b><div className="text-[11.5px] text-inksoft">@{m.username} · {m.role}</div></div>
             <div className="ml-auto flex gap-2">
               {m.status==='pending' ? <>

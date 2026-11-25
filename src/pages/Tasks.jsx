@@ -131,7 +131,7 @@ export default function Tasks() {
                     <span className="text-[11px] font-mono text-inksoft w-8 shrink-0">{taskPct(t)}%</span>
                     <div className="min-w-0">
                       <p className="text-xs sm:text-sm font-medium text-ink dark:text-zinc-100 truncate flex items-center gap-1.5">
-                        {t.pinned && <Pin className="h-3 w-3 text-indigo-600 shrink-0" strokeWidth={2}/>}{t.title}</p>
+                        {t.pinned && <Pin className="h-3 w-3 text-zinc-600 shrink-0" strokeWidth={2}/>}{t.title}</p>
                       <div className="mt-0.5 flex flex-wrap items-center gap-2 text-[11px] text-inksoft">
                         <span>{t.project||'Operasional'}</span><span>•</span>
                         <span>PIC: <b className="text-ink dark:text-zinc-200">{nameOf(t.assignee)}</b></span>
@@ -168,7 +168,7 @@ export default function Tasks() {
               {filtered.map(t=>(
                 <tr key={t.id} onClick={()=>setSelected(t)} className="hover:bg-canvas dark:hover:bg-zinc-800/40 cursor-pointer">
                   <td className="py-3 px-4 font-medium text-ink dark:text-zinc-100">
-                    <div className="flex items-center gap-2">{t.pinned && <Pin className="h-3 w-3 text-indigo-600 shrink-0" strokeWidth={2}/>}<span>{t.title}</span></div>
+                    <div className="flex items-center gap-2">{t.pinned && <Pin className="h-3 w-3 text-zinc-600 shrink-0" strokeWidth={2}/>}<span>{t.title}</span></div>
                   </td>
                   <td className="py-3 px-3 text-inksoft">{t.project||'Operasional'}</td>
                   <td className="py-3 px-3" onClick={e=>e.stopPropagation()}>
@@ -200,7 +200,7 @@ export default function Tasks() {
             onDrop={e=>{ const id=e.dataTransfer.getData('id'); if(id) setStatus(id,col) }}>
             <div className="flex items-center justify-between px-1 pb-3">
               <div className="flex items-center gap-2">
-                <span className={'h-1.5 w-1.5 rounded-full '+(col==='To Do'?'bg-zinc-400':col==='On Progress'?'bg-indigo-600':col==='Review'?'bg-amber-500':'bg-emerald-600')}/>
+                <span className={'h-1.5 w-1.5 rounded-full '+(col==='To Do'?'bg-zinc-400':col==='On Progress'?'bg-zinc-600':col==='Review'?'bg-amber-500':'bg-emerald-600')}/>
                 <span className="text-xs font-semibold text-ink dark:text-white">{statusLabel[col]}</span>
                 <span className="font-mono text-[11px] text-dim">{filtered.filter(t=>t.status===col).length}</span>
               </div>
@@ -268,13 +268,13 @@ export default function Tasks() {
           <div className="flex items-center justify-between border-b border-line px-5 py-4 dark:border-zinc-800">
             <span className="font-mono text-[11px] uppercase tracking-wider text-dim">Detail Pekerjaan</span>
             <div className="flex items-center gap-1">
-              <button onClick={()=>togglePin(selected)} className={'rounded p-1.5 hover:bg-subtle '+(selected.pinned?'text-indigo-600':'text-dim')} title="Sematkan"><Pin className="h-4 w-4" strokeWidth={1.5}/></button>
+              <button onClick={()=>togglePin(selected)} className={'rounded p-1.5 hover:bg-subtle '+(selected.pinned?'text-zinc-600':'text-dim')} title="Sematkan"><Pin className="h-4 w-4" strokeWidth={1.5}/></button>
               <button onClick={()=>{del(selected.id); setSelected(null); setSp({})}} className="rounded p-1.5 text-dim hover:text-rose-600" title="Hapus"><Trash2 className="h-4 w-4" strokeWidth={1.5}/></button>
               <button onClick={()=>{setSelected(null); setSp({})}} className="rounded p-1.5 text-dim hover:text-ink"><X className="h-4 w-4" strokeWidth={1.5}/></button>
             </div>
           </div>
           <div className="flex-1 overflow-y-auto p-5 space-y-5">
-            <input value={selected.title} onChange={e=>updateSelected({title:e.target.value})} className="w-full rounded-lg border border-line bg-canvas px-3 py-2 text-sm font-semibold focus:border-indigo-400 focus:bg-white focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"/>
+            <input value={selected.title} onChange={e=>updateSelected({title:e.target.value})} className="w-full rounded-lg border border-line bg-canvas px-3 py-2 text-sm font-semibold focus:border-zinc-400 focus:bg-white focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"/>
             <div className="grid grid-cols-2 gap-3">
               <label className="space-y-1"><Label className="text-[11px]">Status</Label>
                 <select value={selected.status} onChange={e=>updateSelected({status:e.target.value})} className="field">

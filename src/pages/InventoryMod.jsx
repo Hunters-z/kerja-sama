@@ -34,7 +34,7 @@ export default function InventoryMod() {
             <div className="ml-auto flex items-center gap-2">
               <Button onClick={()=>adj(i.id,-1)} variant="outline" size="icon" className="w-7 h-7 rounded-lg">−</Button>
               <b className="w-10 text-center">{i.qty}</b>
-              <Button onClick={()=>adj(i.id,1)} size="icon" className="w-7 h-7 rounded-lg bg-blue-soft text-blue-dark hover:bg-blue hover:text-white shadow-none">+</Button>
+              <Button onClick={()=>adj(i.id,1)} size="icon" className="w-7 h-7 rounded-lg bg-zinc-soft text-zinc-dark hover:bg-blue hover:text-white shadow-none">+</Button>
             </div>
           </div>
         ))}

@@ -5,8 +5,8 @@ import { Card } from '@/components/ui/card.jsx'
 import { TrendingUp, ArrowRight, CalendarDays, BellRing, Vote, FolderKanban, FileText, Pin, Users, MessageSquare, PlusCircle } from 'lucide-react'
 
 export function StatusPill({s}) {
-  const map = {'To Do':'bg-subtle text-inksoft','On Progress':'bg-indigo-50 text-indigo-700','Review':'bg-amber-50 text-amber-700','Done':'bg-emerald-50 text-emerald-700'}
-  const dot = {'To Do':'bg-zinc-400','On Progress':'bg-indigo-600','Review':'bg-amber-500','Done':'bg-emerald-600'}
+  const map = {'To Do':'bg-subtle text-inksoft','On Progress':'bg-zinc-50 text-zinc-700','Review':'bg-amber-50 text-amber-700','Done':'bg-emerald-50 text-emerald-700'}
+  const dot = {'To Do':'bg-zinc-400','On Progress':'bg-zinc-600','Review':'bg-amber-500','Done':'bg-emerald-600'}
   return <span className={'inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-medium '+ (map[s]||map['To Do'])}>
     <span className={'h-1.5 w-1.5 rounded-full '+(dot[s]||'bg-zinc-400')}/>{s==='To Do'?'Belum Mulai':s==='On Progress'?'Dikerjakan':s}</span>
 }
@@ -78,8 +78,8 @@ export default function Dashboard() {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="text-center space-y-4 max-w-md px-4">
-          <div className="mx-auto w-16 h-16 rounded-full bg-indigo-50 flex items-center justify-center">
-            <Users className="w-8 h-8 text-indigo-600" strokeWidth={1.5} />
+          <div className="mx-auto w-16 h-16 rounded-full bg-zinc-50 flex items-center justify-center">
+            <Users className="w-8 h-8 text-zinc-600" strokeWidth={1.5} />
           </div>
           <h2 className="text-xl font-semibold text-ink dark:text-white">Selamat Datang di Zona Kerja</h2>
           <p className="text-sm text-inksoft dark:text-zinc-400">
@@ -87,7 +87,7 @@ export default function Dashboard() {
           </p>
           <button 
             onClick={() => navigate('/login')}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium transition"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-zinc-600 hover:bg-zinc-700 text-white text-sm font-medium transition"
           >
             <PlusCircle className="w-4 h-4" strokeWidth={2} />
             Masuk Sekarang
@@ -141,7 +141,7 @@ export default function Dashboard() {
         <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-inksoft">
           <div className="flex flex-wrap items-center gap-3">
             <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-emerald-600"/>Selesai: <strong className="font-mono text-ink dark:text-zinc-200">{done}</strong></span>
-            <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-indigo-600"/>Berjalan: <strong className="font-mono text-ink dark:text-zinc-200">{tasks.filter(t=>t.status==='On Progress'||t.status==='Review').length}</strong></span>
+            <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-zinc-600"/>Berjalan: <strong className="font-mono text-ink dark:text-zinc-200">{tasks.filter(t=>t.status==='On Progress'||t.status==='Review').length}</strong></span>
             <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-zinc-400"/>Menunggu: <strong className="font-mono text-ink dark:text-zinc-200">{tasks.filter(t=>t.status==='To Do').length}</strong></span>
           </div>
           <Link to="/proyek" className="text-[11px] font-medium text-ink hover:underline dark:text-zinc-200">Lihat Progres per Proyek →</Link>
@@ -178,14 +178,14 @@ export default function Dashboard() {
               <BellRing className="h-4 w-4 text-inksoft" strokeWidth={1.5}/>
               <h2 className="text-sm font-semibold text-ink dark:text-white">Pengingat & Tenggat Prioritas</h2>
             </div>
-            <Link to="/tugas?new=1" className="text-xs font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-400">+ Tambah Pengingat</Link>
+            <Link to="/tugas?new=1" className="text-xs font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400">+ Tambah Pengingat</Link>
           </div>
           <div className="divide-y divide-line dark:divide-zinc-800">
             {tasks.filter(t=>t.status!=='Done').sort((a,b)=>(a.deadline||'9999')<(b.deadline||'9999')?-1:1).slice(0,6).map(t=>(
               <Link to={'/tugas?open='+t.id} key={t.id} className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 py-3.5 hover:bg-canvas dark:hover:bg-zinc-800/40 transition">
                 <div className="flex items-start gap-3 min-w-0">
-                  <span className={'mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border '+(t.pinned?'border-indigo-300 bg-indigo-50':'border-zinc-300 dark:border-zinc-600')}>
-                    {t.pinned && <Pin className="h-2.5 w-2.5 text-indigo-600" strokeWidth={2}/>}
+                  <span className={'mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border '+(t.pinned?'border-zinc-300 bg-zinc-50':'border-zinc-300 dark:border-zinc-600')}>
+                    {t.pinned && <Pin className="h-2.5 w-2.5 text-zinc-600" strokeWidth={2}/>}
                   </span>
                   <div className="min-w-0">
                     <p className="text-xs sm:text-sm font-medium text-ink dark:text-zinc-100 truncate">{t.title}</p>
@@ -239,14 +239,14 @@ export default function Dashboard() {
             <Card className="p-4">
               <div className="flex items-center justify-between mb-2.5">
                 <span className="flex items-center gap-1.5 text-xs font-semibold text-ink dark:text-white"><Vote className="h-3.5 w-3.5 text-inksoft" strokeWidth={1.5}/>Keputusan Tim</span>
-                <Link to="/voting" className="text-[11px] font-medium text-indigo-600 hover:underline dark:text-indigo-400">Semua</Link>
+                <Link to="/voting" className="text-[11px] font-medium text-zinc-600 hover:underline dark:text-zinc-400">Semua</Link>
               </div>
               <p className="text-xs font-medium text-ink dark:text-zinc-100 leading-snug mb-3">{p.q}</p>
               <div className="space-y-1.5">
                 {p.options.map((o,i)=>{ const count = Object.values(p.votes||{}).filter(v=>v===i).length
                   const pc = total?Math.round(count/total*100):0
                   return <Link key={i} to="/voting" className="relative block w-full overflow-hidden rounded-lg border border-line bg-canvas px-3 py-2 text-left text-[11px] hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-950/60">
-                    <div className="absolute inset-y-0 left-0 bg-indigo-500/10" style={{width:pc+'%'}}/>
+                    <div className="absolute inset-y-0 left-0 bg-zinc-500/10" style={{width:pc+'%'}}/>
                     <div className="relative flex items-center justify-between gap-2">
                       <span className="font-medium text-ink dark:text-zinc-200 truncate">{o}</span>
                       <span className="font-mono text-[10px] text-inksoft">{pc}%</span>

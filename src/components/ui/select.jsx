@@ -36,7 +36,7 @@ SelectContent.displayName = "SelectContent"
 
 const SelectItem = React.forwardRef(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Item ref={ref} className={cn(
-    "relative flex w-full cursor-pointer select-none items-center rounded-lg py-2 pl-2 pr-8 text-sm outline-none focus:bg-blue-soft focus:text-blue data-[disabled]:opacity-50",
+    "relative flex w-full cursor-pointer select-none items-center rounded-lg py-2 pl-2 pr-8 text-sm outline-none focus:bg-zinc-soft focus:text-blue data-[disabled]:opacity-50",
     className
   )} {...props}>
     <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>

@@ -56,7 +56,7 @@ export default function Projects() {
           </div>
           <div className="flex flex-wrap items-center gap-2 text-[11px]">
             <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 font-medium text-emerald-700">{tasks.filter(t=>t.status==='Done').length} Selesai</span>
-            <span className="rounded-full bg-indigo-50 px-2.5 py-0.5 font-medium text-indigo-700">{tasks.filter(t=>t.status==='On Progress'||t.status==='Review').length} Berjalan</span>
+            <span className="rounded-full bg-zinc-50 px-2.5 py-0.5 font-medium text-zinc-700">{tasks.filter(t=>t.status==='On Progress'||t.status==='Review').length} Berjalan</span>
             <span className="rounded-full bg-subtle px-2.5 py-0.5 font-medium text-inksoft">{tasks.filter(t=>t.status==='To Do').length} Belum Mulai</span>
           </div>
         </div>
