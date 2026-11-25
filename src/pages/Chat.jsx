@@ -8,6 +8,8 @@ export default function Chat() {
   const [db, setDb] = useState(loadDB())
   const user = currentUser()
   const nav = useNavigate()
+  const [currentTopic, setCurrentTopic] = useState('General')
+  const topics = ['General', 'Lapangan', 'Material', 'Keuangan']
   const [text, setText] = useState('')
   const [file, setFile] = useState(null)
   const [pollMode, setPollMode] = useState(false)
@@ -19,8 +21,8 @@ export default function Chat() {
   const refresh = () => setDb(loadDB())
   const persist = next => { saveDB(next); setDb(next) }
 
-  const teamMsgs = db.messages.filter(m => m.teamId === user.teamId)
-  const teamPolls = db.polls.filter(p => p.teamId === user.teamId)
+  const teamMsgs = db.messages.filter(m => m.teamId === user.teamId && (m.topic === currentTopic || (!m.topic && currentTopic === 'General')))
+  const teamPolls = db.polls.filter(p => p.teamId === user.teamId && (p.topic === currentTopic || (!p.topic && currentTopic === 'General')))
 
   useEffect(() => {
     const marked = { ...db, messages: db.messages.map(m => m.teamId === user.teamId ? { ...m, readBy: [...new Set([...(m.readBy || []), user.id])] } : m) }
@@ -28,21 +30,22 @@ export default function Chat() {
     const t = setInterval(refresh, 3000)
     return () => clearInterval(t)
     // eslint-disable-next-line
-  }, [])
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [db.messages.length, teamPolls.length])
+  }, [currentTopic])
+
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [db.messages.length, teamPolls.length, currentTopic])
 
   const send = e => {
     e.preventDefault()
     if (pollMode) {
       const opts = pollOpts.filter(o => o.trim())
       if (!pollQ.trim() || opts.length < 2) return
-      const next = { ...db, polls: [...(db.polls || []), { id: 'p' + Date.now(), teamId: user.teamId, q: pollQ, options: opts, votes: {}, by: user.name, closed: false }] }
-      logAct(next, { name: user.name, teamId: user.teamId }, 'membuat voting di diskusi', 'vote')
+      const next = { ...db, polls: [...(db.polls || []), { id: 'p' + Date.now(), teamId: user.teamId, topic: currentTopic, q: pollQ, options: opts, votes: {}, by: user.name, closed: false }] }
+      logAct(next, { name: user.name, teamId: user.teamId }, 'membuat voting di diskusi #' + currentTopic, 'vote')
       persist(next); setPollQ(''); setPollOpts(['', '']); setPollMode(false)
       return
     }
     if (!text.trim() && !file) return
-    const base = { id: 'm' + Date.now(), teamId: user.teamId, userId: user.id, name: user.name, text: text.trim(), file: null, at: new Date().toISOString(), replyTo: replyTo ? (replyTo.name + ': ' + replyTo.text.slice(0, 80)) : null }
+    const base = { id: 'm' + Date.now(), teamId: user.teamId, topic: currentTopic, userId: user.id, name: user.name, text: text.trim(), file: null, at: new Date().toISOString(), replyTo: replyTo ? (replyTo.name + ': ' + replyTo.text.slice(0, 80)) : null }
     const finish = next => { persist(next); setText(''); setFile(null); setReplyTo(null); if (document.getElementById('zk-file')) document.getElementById('zk-file').value = '' }
     if (file) {
       if (file.size > MAX_FILE) { alert('File maksimal 500 KB (mode demo).'); return }
@@ -83,6 +86,17 @@ export default function Chat() {
             </div>
             <div className="px-3 py-1.5 rounded-full bg-subtle dark:bg-zinc-900 border border-line dark:border-zinc-800 text-inksoft dark:text-zinc-400">Hari ini</div>
           </div>
+        </div>
+
+        {/* Topic pills */}
+        <div className="flex items-center gap-1.5 mt-4 overflow-x-auto pb-1">
+          {topics.map(t => (
+            <button key={t} onClick={() => setCurrentTopic(t)}
+              className={'shrink-0 px-3.5 py-1.5 rounded-full text-[11.5px] font-semibold transition border ' +
+                (t === currentTopic ? 'bg-ink dark:bg-zinc-100 text-white dark:text-zinc-900 border-ink dark:border-zinc-100' : 'bg-transparent text-dim dark:text-zinc-400 hover:text-ink dark:hover:text-zinc-200 border-line dark:border-zinc-800')}>
+              {t}
+            </button>
+          ))}
         </div>
 
         {/* Pinned message */}
