@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { loadDB, saveDB, currentUser, logAct } from '@/lib/db.js'
-import { Pin, Reply, BellPlus, Vote, MessageCircle, FileText, Hash, X, CornerDownRight, ArrowLeft, Send, User, Lock } from 'lucide-react'
+import { Pin, Reply, BellPlus, Vote, MessageCircle, FileText, Hash, X, CornerDownRight, ArrowLeft, Send, User, Lock, Plus, Trash2, Pencil } from 'lucide-react'
 
 const MAX_FILE = 500 * 1024
 
@@ -28,6 +28,13 @@ export default function Chat() {
   const [pollOpts, setPollOpts] = useState(['', ''])
   const [replyTo, setReplyTo] = useState(null)
   const [pinned, setPinned] = useState(null)
+  const [addChannelOpen, setAddChannelOpen] = useState(false)
+  const [newChName, setNewChName] = useState('')
+  const [newChTopic, setNewChTopic] = useState('')
+  const [editingChId, setEditingChId] = useState(null)
+  const [editChName, setEditChName] = useState('')
+  const [editChTopic, setEditChTopic] = useState('')
+  const [deleteChId, setDeleteChId] = useState(null)
   const bottomRef = useRef(null)
   const refresh = () => setDb(loadDB())
   const persist = next => { saveDB(next); setDb(next) }
@@ -59,7 +66,12 @@ export default function Chat() {
     // eslint-disable-next-line
   }, [activeChannelId])
 
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [db.messages.length, teamPolls.length, activeChannelId])
+  useEffect(() => {
+    const t = setInterval(refresh, 3000)
+    return () => clearInterval(t)
+  }, [])
+
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [teamMsgs.length, teamPolls.length, activeChannelId])
 
   const send = e => {
     e.preventDefault()
@@ -99,32 +111,86 @@ export default function Chat() {
   const time = iso => new Date(iso).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
   const pinnedMessageInChannel = teamMsgs.find(m => m.pinned)
 
+  const addChannel = () => {
+    if (!newChName.trim()) return
+    const ch = { id: 'ch-' + Date.now(), type: 'channel', name: newChName.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-'), topic: newChTopic.trim() || 'Kanal diskusi baru', teamId: user.teamId, unread: 0 }
+    const next = { ...db, channels: [...(db.channels || []), ch] }
+    logAct(next, { name: user.name, teamId: user.teamId }, 'menambahkan kanal diskusi #' + ch.name, 'hash')
+    persist(next)
+    setNewChName(''); setNewChTopic(''); setAddChannelOpen(false)
+    setActiveChannelId(ch.id)
+  }
+  const deleteChannel = id => {
+    const ch = channels.find(c => c.id === id)
+    if (!ch) return
+    const next = { ...db, channels: (db.channels || []).filter(c => c.id !== id), messages: db.messages.filter(m => m.channelId !== id), polls: (db.polls || []).filter(p => p.channelId !== id) }
+    persist(next)
+    if (activeChannelId === id) setActiveChannelId('ch-umum')
+  }
+  const startEditChannel = ch => { setEditingChId(ch.id); setEditChName(ch.name); setEditChTopic(ch.topic || '') }
+  const saveEditChannel = () => {
+    const next = { ...db, channels: (db.channels || []).map(c => c.id === editingChId ? { ...c, name: editChName.trim() || c.name, topic: editChTopic.trim() } : c) }
+    persist(next)
+    setEditingChId(null)
+  }
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
       <div className="rounded-xl border border-line bg-white shadow-hairline overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
-        <div className="grid grid-cols-1 md:grid-cols-12 min-h-[540px] max-h-[72vh]">
+        <div className="grid grid-cols-1 md:grid-cols-12 h-[72vh] min-h-[540px]">
 
           {/* Left Channels & DMs */}
           <div className={(mobileShowThread ? 'hidden md:flex' : 'flex') + ' md:col-span-4 lg:col-span-3 flex-col border-r border-line bg-subtle dark:border-zinc-800 dark:bg-zinc-950/40'}>
             <div className="p-3.5 border-b border-line dark:border-zinc-800 flex items-center justify-between">
               <span className="text-[11px] font-semibold uppercase tracking-wider text-inksoft">Kanal Diskusi</span>
-              <button onClick={() => setPollMode(true)} title="Buat Voting di Kanal" className="rounded p-1 text-inksoft hover:bg-subtle dark:hover:bg-zinc-800 transition">
-                <Vote className="h-3.5 w-3.5" strokeWidth={1.5} />
+              <button onClick={() => setAddChannelOpen(true)} title="Tambah Kanal" className="rounded p-1 text-inksoft hover:bg-subtle dark:hover:bg-zinc-800 transition">
+                <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />
               </button>
             </div>
 
             <div className="flex-1 overflow-y-auto p-2 space-y-4">
+              {addChannelOpen && (
+                <div className="mx-2 mb-2 rounded-lg border border-line bg-white p-3 dark:border-zinc-700 dark:bg-zinc-900 space-y-2">
+                  <input value={newChName} onChange={e => setNewChName(e.target.value)} placeholder="Nama kanal (opsi)..."
+                    className="w-full rounded-md border border-line bg-canvas px-2 py-1.5 text-xs focus:border-zinc-400 outline-none dark:border-zinc-700 dark:bg-zinc-950 dark:text-ink" />
+                  <input value={newChTopic} onChange={e => setNewChTopic(e.target.value)} placeholder="Deskripsi singkat..."
+                    className="w-full rounded-md border border-line bg-canvas px-2 py-1.5 text-xs focus:border-zinc-400 outline-none dark:border-zinc-700 dark:bg-zinc-950 dark:text-ink" />
+                  <div className="flex items-center gap-2">
+                    <button onClick={addChannel} className="flex-1 rounded-md bg-ink text-white text-[11px] font-medium py-1.5 hover:opacity-90 transition dark:bg-zinc-100 dark:text-zinc-900">Simpan</button>
+                    <button onClick={() => setAddChannelOpen(false)} className="flex-1 rounded-md border border-line text-inksoft text-[11px] font-medium py-1.5 hover:bg-subtle transition dark:border-zinc-700">Batal</button>
+                  </div>
+                </div>
+              )}
+
               <div className="space-y-0.5">
                 <div className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-dim">Saluran Kerja</div>
                 {channels.filter(c => c.type === 'channel').map(ch => (
-                  <button key={ch.id} onClick={() => { setActiveChannelId(ch.id); setMobileShowThread(true); setPinned(null); setReplyTo(null) }}
-                    className={(activeChannelId === ch.id ? 'bg-white text-ink font-semibold shadow-hairline border border-line dark:bg-zinc-800 dark:text-white dark:border-zinc-700' : 'text-inksoft hover:bg-subtle dark:text-zinc-400 dark:hover:bg-zinc-800/50') + ' flex w-full items-center justify-between rounded-lg px-2.5 py-2 text-xs transition'}>
-                    <span className="flex items-center gap-2 truncate">
-                      <Hash className="h-3.5 w-3.5 text-dim shrink-0" strokeWidth={1.5} />
-                      <span className="truncate">{ch.name}</span>
-                    </span>
-                    {ch.unread > 0 && <span className="rounded-full bg-ink dark:bg-zinc-100 px-1.5 py-0.2 font-mono text-[10px] text-white dark:text-zinc-900">{ch.unread}</span>}
-                  </button>
+                  <div key={ch.id} className="relative group/ch">
+                    <button onClick={() => { setActiveChannelId(ch.id); setMobileShowThread(true); setPinned(null); setReplyTo(null) }}
+                      className={(activeChannelId === ch.id ? 'bg-white text-ink font-semibold shadow-hairline border border-line dark:bg-zinc-800 dark:text-white dark:border-zinc-700' : 'text-inksoft hover:bg-subtle dark:text-zinc-400 dark:hover:bg-zinc-800/50') + ' flex w-full items-center justify-between rounded-lg px-2.5 py-2 text-xs transition'}>
+                      <span className="flex items-center gap-2 truncate">
+                        <Hash className="h-3.5 w-3.5 text-dim shrink-0" strokeWidth={1.5} />
+                        <span className="truncate">{ch.name}</span>
+                      </span>
+                      {ch.unread > 0 && <span className="rounded-full bg-ink dark:bg-zinc-100 px-1.5 py-0.2 font-mono text-[10px] text-white dark:text-zinc-900">{ch.unread}</span>}
+                    </button>
+                    <div className="absolute right-1 top-1 hidden group-hover/ch:flex items-center gap-1">
+                      <button onClick={e => { e.stopPropagation(); startEditChannel(ch) }} className="p-1 rounded hover:bg-subtle text-dim hover:text-ink dark:hover:bg-zinc-700 transition">
+                        <Pencil className="h-3 w-3" strokeWidth={1.5} />
+                      </button>
+                      <button onClick={e => { e.stopPropagation(); deleteChannel(ch.id) }} className="p-1 rounded hover:bg-subtle text-dim hover:text-rose-600 dark:hover:bg-zinc-700 transition">
+                        <Trash2 className="h-3 w-3" strokeWidth={1.5} />
+                      </button>
+                    </div>
+                    {editingChId === ch.id && (
+                      <div className="mt-1 ml-1 space-y-1.5">
+                        <input value={editChName} onChange={e => setEditChName(e.target.value)} onBlur={() => saveEditChannel()} onKeyDown={e => e.key === 'Enter' && saveEditChannel()}
+                          className="w-full rounded-md border border-line bg-white px-2 py-1 text-[11px] focus:border-zinc-400 outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-ink" autoFocus />
+                        <input value={editChTopic} onChange={e => setEditChTopic(e.target.value)} onBlur={() => saveEditChannel()} onKeyDown={e => e.key === 'Enter' && saveEditChannel()}
+                          className="w-full rounded-md border border-line bg-white px-2 py-1 text-[11px] focus:border-zinc-400 outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-ink" placeholder="Topik..." />
+                      </div>
+                    )}
+                  </div>
                 ))}
               </div>
 
@@ -228,7 +294,7 @@ export default function Chat() {
                         const poll = teamPolls.find(p => p.id === m.pollId)
                         const totalVotes = Object.keys(poll.votes || {}).length
                         return (
-                          <div className="mt-2.5 max-w-md rounded-xl border border-line bg-subtle p-3.5 dark:border-zinc-800 dark:bg-zinc-950/60">
+                          <div className="mt-2.5 w-full max-w-sm sm:max-w-md rounded-xl border border-line bg-subtle p-3.5 dark:border-zinc-800 dark:bg-zinc-950/60">
                             <div className="flex items-center justify-between gap-2 mb-2">
                               <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-inksoft">
                                 <Vote className="h-3 w-3" strokeWidth={1.5} /> Voting Keputusan
