@@ -86,14 +86,14 @@ export default function Tasks() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8 space-y-4">
       {/* Header & view switch */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-line bg-white p-4 shadow-hairline dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-line bg-surface p-4 shadow-hairline dark:border-zinc-800 dark:bg-zinc-900">
         <div>
           <h1 className="text-base sm:text-lg font-semibold text-ink dark:text-white">Tugas, Proyek & Tenggat</h1>
           <p className="text-xs text-inksoft dark:text-zinc-400">Kelola seluruh pekerjaan tim dalam daftar fokus, tabel, atau papan kanban.</p>
         </div>
         <div className="flex items-center gap-1 rounded-lg border border-line bg-subtle p-0.5 dark:border-zinc-800 dark:bg-zinc-950 self-start sm:self-auto">
           {[['focus','Daftar Fokus'],['table','Tabel'],['kanban','Kanban']].map(([k,l])=>(
-            <button key={k} onClick={()=>setView(k)} className={'rounded-md px-2.5 py-1.5 text-xs font-medium transition '+(view===k?'bg-white text-ink shadow-hairline dark:bg-zinc-800 dark:text-white':'text-inksoft hover:text-ink')}>
+            <button key={k} onClick={()=>setView(k)} className={'rounded-md px-2.5 py-1.5 text-xs font-medium transition '+(view===k?'bg-surface text-ink shadow-hairline dark:bg-zinc-800 dark:text-white':'text-inksoft hover:text-ink')}>
               {l}</button>
           ))}
         </div>
@@ -116,7 +116,7 @@ export default function Tasks() {
       {/* Focus view */}
       {view==='focus' && <div className="space-y-4">
         {groups.map(g=>(
-          <div key={g.key} className="rounded-xl border border-line bg-white shadow-hairline overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
+          <div key={g.key} className="rounded-xl border border-line bg-surface shadow-hairline overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
             <div className="flex items-center justify-between border-b border-line bg-canvas px-4 py-2.5 dark:border-zinc-800 dark:bg-zinc-950/40">
               <div className="flex items-center gap-2">
                 <span className={'h-1.5 w-1.5 rounded-full '+g.dot}/>
@@ -141,7 +141,7 @@ export default function Tasks() {
                   </div>
                   <div className="flex items-center gap-2.5 shrink-0">
                     {t.status!=='Done' && t.deadline && <button onClick={e=>{e.stopPropagation(); snooze(t)}} title="Tunda ke besok"
-                      className="rounded-md border border-line bg-white px-2 py-1 text-[10px] font-medium text-inksoft hover:text-ink dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">+1 Hari</button>}
+                      className="rounded-md border border-line bg-surface px-2 py-1 text-[10px] font-medium text-inksoft hover:text-ink dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">+1 Hari</button>}
                     <span className="hidden sm:inline font-mono text-[11px] text-inksoft">{t.deadline||'—'}</span>
                     <StatusPill s={t.status}/>
                   </div>
@@ -154,7 +154,7 @@ export default function Tasks() {
       </div>}
 
       {/* Table view */}
-      {view==='table' && <div className="rounded-xl border border-line bg-white shadow-hairline overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
+      {view==='table' && <div className="rounded-xl border border-line bg-surface shadow-hairline overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
@@ -173,7 +173,7 @@ export default function Tasks() {
                   <td className="py-3 px-3 text-inksoft">{t.project||'Operasional'}</td>
                   <td className="py-3 px-3" onClick={e=>e.stopPropagation()}>
                     <select value={t.status} onChange={e=>setStatus(t.id,e.target.value)}
-                      className="rounded-md border border-line bg-white px-2 py-1 text-[11px] font-medium dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+                      className="rounded-md border border-line bg-surface px-2 py-1 text-[11px] font-medium dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
                       {COLS.map(c=><option key={c} value={c}>{statusLabel[c]}</option>)}
                     </select>
                   </td>
@@ -208,7 +208,7 @@ export default function Tasks() {
             <div className="space-y-2.5">
               {filtered.filter(t=>t.status===col).map(t=>(
                 <div key={t.id} draggable onDragStart={e=>e.dataTransfer.setData('id',t.id)} onClick={()=>setSelected(t)}
-                  className="rounded-lg border border-line bg-white p-3.5 shadow-hairline hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 cursor-pointer transition">
+                  className="rounded-lg border border-line bg-surface p-3.5 shadow-hairline hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 cursor-pointer transition">
                   <div className="flex items-center justify-between gap-2 mb-1.5">
                     <span className="text-[11px] text-inksoft">{t.project||'Operasional'}</span>
                     <PriorityDot p={t.priority}/>
@@ -235,7 +235,7 @@ export default function Tasks() {
       {/* New task modal */}
       {modal && <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
         <div onClick={()=>setModal(false)} className="fixed inset-0 bg-zinc-950/30"/>
-        <form onSubmit={addTask} className="relative z-10 w-full max-w-md rounded-xl border border-line bg-white p-5 shadow-float space-y-3.5 dark:border-zinc-800 dark:bg-zinc-900">
+        <form onSubmit={addTask} className="relative z-10 w-full max-w-md rounded-xl border border-line bg-surface p-5 shadow-float space-y-3.5 dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-semibold text-ink dark:text-white">Tambah Pekerjaan / Pengingat</h3>
             <button type="button" onClick={()=>setModal(false)} className="text-dim hover:text-ink"><X className="h-4 w-4" strokeWidth={1.5}/></button>
@@ -264,7 +264,7 @@ export default function Tasks() {
       {/* Detail drawer */}
       {selected && <div className="fixed inset-0 z-50 flex justify-end">
         <div onClick={()=>{setSelected(null); setSp({})}} className="fixed inset-0 bg-zinc-950/30 backdrop-blur-[1px]"/>
-        <div className="relative z-10 flex w-full max-w-md flex-col bg-white shadow-2xl border-l border-line dark:bg-zinc-900 dark:border-zinc-800">
+        <div className="relative z-10 flex w-full max-w-md flex-col bg-surface shadow-2xl border-l border-line dark:bg-zinc-900 dark:border-zinc-800">
           <div className="flex items-center justify-between border-b border-line px-5 py-4 dark:border-zinc-800">
             <span className="font-mono text-[11px] uppercase tracking-wider text-dim">Detail Pekerjaan</span>
             <div className="flex items-center gap-1">
@@ -274,7 +274,7 @@ export default function Tasks() {
             </div>
           </div>
           <div className="flex-1 overflow-y-auto p-5 space-y-5">
-            <input value={selected.title} onChange={e=>updateSelected({title:e.target.value})} className="w-full rounded-lg border border-line bg-canvas px-3 py-2 text-sm font-semibold focus:border-zinc-400 focus:bg-white focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"/>
+            <input value={selected.title} onChange={e=>updateSelected({title:e.target.value})} className="w-full rounded-lg border border-line bg-canvas px-3 py-2 text-sm font-semibold focus:border-zinc-400 focus:bg-surface focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"/>
             <div className="grid grid-cols-2 gap-3">
               <label className="space-y-1"><Label className="text-[11px]">Status</Label>
                 <select value={selected.status} onChange={e=>updateSelected({status:e.target.value})} className="field">

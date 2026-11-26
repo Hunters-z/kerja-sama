@@ -126,7 +126,7 @@ export default function Dashboard() {
     .slice(0, 5)
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8 space-y-6">
+    <div className="mx-auto max-w-6xl px-4 py-6 pb-10 sm:px-6 lg:px-8 lg:pb-12 space-y-6">
       {/* Greeting */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-line pb-5 dark:border-zinc-800">
         <div>
@@ -137,11 +137,11 @@ export default function Dashboard() {
           </p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          <div className="flex items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-1.5 text-xs font-medium text-ink hover:bg-subtle dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 transition cursor-default">
+          <div className="flex items-center gap-1.5 rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-medium text-ink hover:bg-subtle dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 transition cursor-default">
             <FolderKanban className="h-3.5 w-3.5 text-inksoft" strokeWidth={1.5} />
             <span className="hidden sm:inline">Proyek & Progres</span>
           </div>
-          <div className="flex items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-1.5 text-xs font-medium text-ink hover:bg-subtle dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 transition cursor-default">
+          <div className="flex items-center gap-1.5 rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-medium text-ink hover:bg-subtle dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 transition cursor-default">
             <FileText className="h-3.5 w-3.5 text-inksoft" strokeWidth={1.5} />
             <span className="hidden sm:inline">Catatan Baru</span>
           </div>
@@ -178,7 +178,7 @@ export default function Dashboard() {
           { label: 'Tenggat Mendatang', v: upcoming.length, tone: 'amber', chip: 'Terjadwal' },
           { label: 'Pengingat Disematkan', v: pinned.length, tone: 'emerald', chip: 'Aktif' },
         ].map((c, i) => (
-          <div key={i} className="group rounded-xl border border-line bg-white p-4 shadow-hairline hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 transition cursor-default">
+          <div key={i} className="group rounded-xl border border-line bg-surface p-4 shadow-hairline hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 transition cursor-default">
             <div className="flex items-center justify-between">
               <span className="text-xs font-medium text-inksoft dark:text-zinc-400">{c.label}</span>
               <span className={'flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-medium ' +
@@ -247,8 +247,8 @@ export default function Dashboard() {
                   </div>
                 </div>
                 <div className="flex items-center gap-1.5 self-end sm:self-center shrink-0">
-                  <button className="rounded-md border border-line bg-white px-2 py-1 text-[10px] font-medium text-inksoft hover:border-zinc-300 hover:text-ink dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 transition cursor-default">Besok</button>
-                  <button className="rounded-md border border-line bg-white px-2 py-1 text-[10px] font-medium text-inksoft hover:border-zinc-300 hover:text-ink dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 transition cursor-default">+3 Hari</button>
+                  <button className="rounded-md border border-line bg-surface px-2 py-1 text-[10px] font-medium text-inksoft hover:border-zinc-300 hover:text-ink dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 transition cursor-default">Besok</button>
+                  <button className="rounded-md border border-line bg-surface px-2 py-1 text-[10px] font-medium text-inksoft hover:border-zinc-300 hover:text-ink dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 transition cursor-default">+3 Hari</button>
                   <StatusPill s={t.status} />
                 </div>
               </div>
@@ -269,7 +269,7 @@ export default function Dashboard() {
               {docs.slice(0, 4).map(d => (
                 <div key={d.id} className="flex w-full items-center justify-between rounded-lg border border-line bg-canvas p-2.5 text-left hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-950/50 transition cursor-default">
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="grid h-7 w-7 place-items-center rounded-md border border-line bg-white text-inksoft dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                    <div className="grid h-7 w-7 place-items-center rounded-md border border-line bg-surface text-inksoft dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
                       <FileText className="h-3.5 w-3.5" strokeWidth={1.5} />
                     </div>
                     <div className="truncate">

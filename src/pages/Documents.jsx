@@ -54,7 +54,7 @@ export default function Documents() {
       {docs.length===0 ? <div className="rounded-xl border border-dashed border-line p-10 text-center text-xs text-dim">
         <FileText className="h-6 w-6 mx-auto mb-2" strokeWidth={1.5}/>Belum ada dokumen. Buat dari template untuk mulai.</div> :
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {docs.map(d=><button key={d.id} onClick={()=>setActiveId(d.id)} className="rounded-xl border border-line bg-white p-4 text-left shadow-hairline hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900">
+        {docs.map(d=><button key={d.id} onClick={()=>setActiveId(d.id)} className="rounded-xl border border-line bg-surface p-4 text-left shadow-hairline hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900">
           <FileText className="h-4 w-4 text-inksoft mb-2" strokeWidth={1.5}/>
           <p className="text-sm font-semibold text-ink dark:text-white">{d.title}</p>
           <p className="text-[11px] text-dim mt-0.5">{d.category} • {d.pic}</p>
@@ -67,7 +67,7 @@ export default function Documents() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-6">
       <div className="mx-auto max-w-3xl">
-        <div className="rounded-xl border border-line bg-white shadow-hairline overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="rounded-xl border border-line bg-surface shadow-hairline overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
           <div className="p-5 sm:p-8 lg:p-10">
             <div className="flex items-center justify-between gap-2 mb-5 text-xs">
               <button onClick={()=>setSp({})} className="text-dim hover:text-ink">← Semua Dokumen</button>
@@ -79,7 +79,7 @@ export default function Documents() {
             <div className="relative flex items-center gap-3 mb-5">
               <button onClick={()=>setIconOpen(v=>!v)} className="grid h-10 w-10 place-items-center rounded-lg border border-line bg-canvas text-ink hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white">
                 <Shapes className="h-4 w-4" strokeWidth={1.5}/></button>
-              {iconOpen && <div className="absolute left-0 top-12 z-20 grid grid-cols-5 gap-1.5 rounded-xl border border-line bg-white p-2.5 shadow-float w-48 dark:border-zinc-700 dark:bg-zinc-800">
+              {iconOpen && <div className="absolute left-0 top-12 z-20 grid grid-cols-5 gap-1.5 rounded-xl border border-line bg-surface p-2.5 shadow-float w-48 dark:border-zinc-700 dark:bg-zinc-800">
                 {ICONS.map(ic=><button key={ic} onClick={()=>{updateDoc({icon:ic}); setIconOpen(false)}} className="grid h-8 w-8 place-items-center rounded-lg text-inksoft hover:bg-subtle"><FileText className="h-4 w-4" strokeWidth={1.5}/></button>)}
               </div>}
               <input value={active.title} onChange={e=>updateDoc({title:e.target.value})} placeholder="Judul Dokumen..."
@@ -148,7 +148,7 @@ export default function Documents() {
 function TemplateModal({onClose, onPick}) {
   return <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
     <div onClick={onClose} className="fixed inset-0 bg-zinc-950/30"/>
-    <div className="relative z-10 w-full max-w-lg rounded-xl border border-line bg-white p-5 shadow-float space-y-4 dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="relative z-10 w-full max-w-lg rounded-xl border border-line bg-surface p-5 shadow-float space-y-4 dark:border-zinc-800 dark:bg-zinc-900">
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-sm font-semibold text-ink dark:text-white">Buat Halaman Dokumen Baru</h3>
@@ -161,7 +161,7 @@ function TemplateModal({onClose, onPick}) {
           const Icon = TPL_ICON[tpl.icon] || FileText
           return (
           <button key={tpl.name} onClick={()=>onPick(tpl)} className="flex items-start gap-3 rounded-lg border border-line bg-canvas p-3 text-left hover:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-950/60">
-            <div className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-line bg-white text-ink dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+            <div className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-line bg-surface text-ink dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
               <Icon className="h-4 w-4" strokeWidth={1.5}/>
             </div>
             <div>

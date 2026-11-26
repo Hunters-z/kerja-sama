@@ -33,7 +33,7 @@ export default function Voting() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8 space-y-5">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-line bg-white p-5 shadow-hairline dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-line bg-surface p-5 shadow-hairline dark:border-zinc-800 dark:bg-zinc-900">
         <div>
           <h1 className="text-base sm:text-lg font-semibold text-ink dark:text-white">Voting & Keputusan Tim</h1>
           <p className="text-xs text-inksoft mt-0.5">Rekam kesepakatan kerja, jadwal rapat, dan prioritas proyek secara transparan.</p>
@@ -46,7 +46,7 @@ export default function Voting() {
           const total = Object.keys(p.votes||{}).length
           const mine = p.votes?.[user.id]
           return (
-          <div key={p.id} className="flex flex-col justify-between rounded-xl border border-line bg-white p-5 shadow-hairline dark:border-zinc-800 dark:bg-zinc-900">
+          <div key={p.id} className="flex flex-col justify-between rounded-xl border border-line bg-surface p-5 shadow-hairline dark:border-zinc-800 dark:bg-zinc-900">
             <div>
               <div className="flex items-center justify-between gap-2 mb-3">
                 <span className={'inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-medium '+(p.closed?'bg-subtle text-inksoft':'bg-emerald-50 text-emerald-700')}>
@@ -92,7 +92,7 @@ export default function Voting() {
 
       {modal && <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
         <div onClick={()=>setModal(false)} className="fixed inset-0 bg-zinc-950/30"/>
-        <form onSubmit={create} className="relative z-10 w-full max-w-md rounded-xl border border-line bg-white p-5 shadow-float space-y-3.5 dark:border-zinc-800 dark:bg-zinc-900">
+        <form onSubmit={create} className="relative z-10 w-full max-w-md rounded-xl border border-line bg-surface p-5 shadow-float space-y-3.5 dark:border-zinc-800 dark:bg-zinc-900">
           <h3 className="text-sm font-semibold text-ink dark:text-white">Buat Voting Keputusan</h3>
           <input required autoFocus value={form.q} onChange={e=>setForm({...form,q:e.target.value})} placeholder="Pertanyaan voting..." className="field !text-sm font-medium"/>
           {form.options.map((o,i)=>(

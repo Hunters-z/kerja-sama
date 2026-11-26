@@ -125,7 +125,7 @@ export default function Shell() {
     <div className="flex h-[100dvh] w-full overflow-hidden bg-canvas dark:bg-zinc-950">
       {drawer && <div onClick={()=>setDrawer(false)} className="fixed inset-0 z-40 bg-zinc-950/30 lg:hidden" />}
       {/* Sidebar */}
-      <aside className={'fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r border-line bg-white dark:border-zinc-800 dark:bg-zinc-900 transition-all duration-200 lg:static ' +
+      <aside className={'fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r border-line bg-surface dark:border-zinc-800 dark:bg-zinc-900 transition-all duration-200 lg:static ' +
         (drawer ? 'translate-x-0' : '-translate-x-full lg:translate-x-0') + (collapsed ? ' lg:w-16' : '')}>
         <div className="flex h-14 items-center justify-between border-b border-line px-3.5 dark:border-zinc-800">
           <div className="flex items-center gap-2.5 overflow-hidden">
@@ -149,7 +149,7 @@ export default function Shell() {
           <button onClick={()=>setSearchOpen(true)}
             className={'flex w-full items-center rounded-lg border border-line bg-canvas py-1.5 text-xs text-inksoft hover:bg-subtle dark:border-zinc-800 dark:bg-zinc-950/60 dark:text-zinc-400 transition ' + (collapsed?'justify-center px-0':'justify-between px-2.5')}>
             <span className="flex items-center gap-2"><Search className="h-3.5 w-3.5 text-dim" strokeWidth={1.5}/>{!collapsed && 'Cari cepat...'}</span>
-            {!collapsed && <kbd className="rounded border border-line bg-white px-1.5 font-mono text-[10px] text-dim dark:border-zinc-700 dark:bg-zinc-800">Ctrl K</kbd>}
+            {!collapsed && <kbd className="rounded border border-line bg-surface px-1.5 font-mono text-[10px] text-dim dark:border-zinc-700 dark:bg-zinc-800">Ctrl K</kbd>}
           </button>
           <button onClick={()=>nav2('/dokumen?new=1')}
             className={'flex w-full items-center rounded-lg bg-ink py-2 text-xs font-medium text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white transition ' + (collapsed?'justify-center px-0':'justify-center gap-1.5')}>
@@ -162,7 +162,7 @@ export default function Shell() {
             {!collapsed && <div className="px-2.5 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-dim">Navigasi Utama</div>}
             <nav className="space-y-0.5">
               {nav.map(it => sidebarBtn(it, loc.pathname===it.to, ()=>nav2(it.to), (
-                <span className="rounded-full border border-line bg-white px-1.5 font-mono text-[10px] font-medium text-inksoft dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300">
+                <span className="rounded-full border border-line bg-surface px-1.5 font-mono text-[10px] font-medium text-inksoft dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300">
                   {badges[it.to] || ''}
                 </span>
               )))}
@@ -196,7 +196,7 @@ export default function Shell() {
 
       {/* Main */}
       <div className="flex flex-1 flex-col min-w-0 bg-canvas dark:bg-zinc-950">
-        <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between border-b border-line bg-white/90 px-4 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/90">
+        <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between border-b border-line bg-surface/90 px-4 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/90">
           <div className="flex items-center gap-2.5 min-w-0">
             <button onClick={()=>setDrawer(true)} className="grid lg:hidden h-8 w-8 place-items-center rounded-lg border border-line text-inksoft dark:border-zinc-800">
               <Menu className="h-4 w-4" strokeWidth={1.5}/></button>
@@ -210,18 +210,18 @@ export default function Shell() {
             <button onClick={()=>setSearchOpen(true)} className="grid sm:hidden h-8 w-8 place-items-center rounded-lg text-inksoft hover:bg-subtle dark:hover:bg-zinc-800">
               <Search className="h-4 w-4" strokeWidth={1.5}/></button>
             <span className="hidden md:block text-[12px] text-inksoft">Halo, <b className="text-ink dark:text-white">{user.name}</b></span>
-            <NavLink to="/chat" className="hidden md:flex items-center gap-1.5 rounded-lg border border-line bg-white px-2.5 py-1.5 text-xs font-medium text-inksoft hover:text-ink dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300">
+            <NavLink to="/chat" className="hidden md:flex items-center gap-1.5 rounded-lg border border-line bg-surface px-2.5 py-1.5 text-xs font-medium text-inksoft hover:text-ink dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300">
               <MessagesSquare className="h-3.5 w-3.5" strokeWidth={1.5}/>Diskusi
             </NavLink>
             <button onClick={quickAddPrefill} className="btn-dark"><Plus className="h-3.5 w-3.5" strokeWidth={1.5}/><span className="hidden sm:inline">Tugas / Pengingat</span></button>
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto pb-28 lg:pb-24"><Outlet/></main>
+        <main className="flex-1 overflow-y-auto pb-32 lg:pb-28"><Outlet/></main>
 
         {/* Quick capture */}
         <div className="fixed bottom-14 lg:bottom-4 left-0 right-0 z-20 px-3 sm:px-6 pointer-events-none">
-          <form onSubmit={quickAdd} className="mx-auto max-w-2xl pointer-events-auto flex items-center gap-2 rounded-xl border border-line bg-white/95 p-1.5 pl-3 shadow-float backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/95">
+          <form onSubmit={quickAdd} className="mx-auto max-w-2xl pointer-events-auto flex items-center gap-2 rounded-xl border border-line bg-surface/95 p-1.5 pl-3 shadow-float backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/95">
             <BellPlus className="h-4 w-4 text-inksoft shrink-0" strokeWidth={1.5}/>
             <input value={quick} onChange={e=>setQuick(e.target.value)} placeholder="Catat tugas atau pengingat agar tidak lupa... (Enter)" className="w-full bg-transparent text-xs sm:text-sm text-ink placeholder-dim focus:outline-none dark:text-white"/>
             <select value={quickBucket} onChange={e=>setQuickBucket(e.target.value)} className="hidden sm:block rounded-md border border-line bg-canvas px-2 py-1 text-[11px] font-medium text-inksoft focus:outline-none dark:border-zinc-700 dark:bg-zinc-800">
@@ -232,7 +232,7 @@ export default function Shell() {
         </div>
 
         {/* Mobile bottom nav */}
-        <nav className="fixed bottom-0 inset-x-0 z-30 flex lg:hidden h-14 items-center justify-around border-t border-line bg-white/95 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/95">
+        <nav className="fixed bottom-0 inset-x-0 z-30 flex lg:hidden h-14 items-center justify-around border-t border-line bg-surface/95 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/95">
           {nav.filter(n=>bottomPaths.includes(n.to)).map(it=>(
             <NavLink key={it.to} to={it.to} end={it.to==='/'} className={({isActive})=>'flex flex-col items-center gap-0.5 text-[10px] '+(isActive?'text-ink dark:text-white font-semibold':'text-dim')}>
               <it.icon className="h-4 w-4" strokeWidth={1.5}/>{it.name.split(' ')[0]}
@@ -244,7 +244,7 @@ export default function Shell() {
       {/* Search modal */}
       {searchOpen && <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4">
         <div onClick={()=>setSearchOpen(false)} className="fixed inset-0 bg-zinc-950/30 backdrop-blur-[1px]"/>
-        <div className="relative z-10 w-full max-w-lg rounded-xl border border-line bg-white shadow-float overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="relative z-10 w-full max-w-lg rounded-xl border border-line bg-surface shadow-float overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex items-center border-b border-line px-4 py-3 dark:border-zinc-800">
             <Search className="h-4 w-4 text-dim mr-3" strokeWidth={1.5}/>
             <input ref={searchRef} value={searchQ} onChange={e=>setSearchQ(e.target.value)} placeholder="Cari pekerjaan, pengingat, atau dokumen..." className="w-full bg-transparent text-sm focus:outline-none dark:text-white"/>

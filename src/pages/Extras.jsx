@@ -30,21 +30,21 @@ export default function Extras() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8 space-y-5">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-line bg-white p-5 shadow-hairline dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-line bg-surface p-5 shadow-hairline dark:border-zinc-800 dark:bg-zinc-900">
         <div>
           <h1 className="text-base sm:text-lg font-semibold text-ink dark:text-white">Kalender Tenggat, Snippets & Riwayat</h1>
           <p className="text-xs text-inksoft mt-0.5">Referensi cepat tenggat tim, catatan tempel, dan log aktivitas pekerjaan.</p>
         </div>
         <div className="flex items-center gap-1 rounded-lg border border-line bg-subtle p-0.5 dark:border-zinc-800 dark:bg-zinc-950 self-start sm:self-auto">
           {[['calendar','Kalender'],['snippets','Snippets'],['activity','Riwayat']].map(([k,l])=>(
-            <button key={k} onClick={()=>setTab(k)} className={'rounded-md px-2.5 py-1.5 text-xs font-medium transition '+(tab===k?'bg-white text-ink shadow-hairline dark:bg-zinc-800 dark:text-white':'text-inksoft')}>{l}</button>
+            <button key={k} onClick={()=>setTab(k)} className={'rounded-md px-2.5 py-1.5 text-xs font-medium transition '+(tab===k?'bg-surface text-ink shadow-hairline dark:bg-zinc-800 dark:text-white':'text-inksoft')}>{l}</button>
           ))}
         </div>
       </div>
 
       {tab==='calendar' && <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {roadmap.map(slot=>(
-          <div key={slot.period} className="rounded-xl border border-line bg-white p-4 shadow-hairline dark:border-zinc-800 dark:bg-zinc-900">
+          <div key={slot.period} className="rounded-xl border border-line bg-surface p-4 shadow-hairline dark:border-zinc-800 dark:bg-zinc-900">
             <div className="flex items-center justify-between border-b border-line pb-2.5 mb-3 dark:border-zinc-800">
               <span className="text-xs font-semibold text-ink dark:text-white">{slot.period}</span>
               <span className="font-mono text-[10px] text-dim">{slot.tag}</span>
@@ -65,7 +65,7 @@ export default function Extras() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
           {snippets.map(s=>(
-            <div key={s.id} className="rounded-xl border border-line bg-white p-4 shadow-hairline space-y-2 dark:border-zinc-800 dark:bg-zinc-900">
+            <div key={s.id} className="rounded-xl border border-line bg-surface p-4 shadow-hairline space-y-2 dark:border-zinc-800 dark:bg-zinc-900">
               <div className="flex items-center justify-between gap-2">
                 <input value={s.title} onChange={e=>persist({...db, snippets:(db.snippets||[]).map(x=>x.id===s.id?{...x,title:e.target.value}:x)})}
                   className="w-full bg-transparent text-xs font-semibold text-ink focus:outline-none dark:text-white"/>
@@ -83,7 +83,7 @@ export default function Extras() {
         </div>
       </div>}
 
-      {tab==='activity' && <div className="rounded-xl border border-line bg-white p-5 shadow-hairline dark:border-zinc-800 dark:bg-zinc-900">
+      {tab==='activity' && <div className="rounded-xl border border-line bg-surface p-5 shadow-hairline dark:border-zinc-800 dark:bg-zinc-900">
         <div className="space-y-3">
           {activity.map(a=>(
             <div key={a.id} className="flex items-start gap-3 border-b border-line pb-3 last:border-0 last:pb-0 dark:border-zinc-800">

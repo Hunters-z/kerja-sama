@@ -6,8 +6,8 @@ export default {
     extend: {
       colors: {
         // legacy aliases (masih dipakai beberapa modul)
-        bg:'#FAFAFA', card:'#FFFFFF', card2:'#F4F4F5', line:'#E4E4E7',
-        ink:'#18181B', inksoft:'#52525B', dim:'#A1A1AA',
+        bg:'hsl(var(--zk-canvas))', card:'hsl(var(--zk-surface))', card2:'hsl(var(--zk-subtle))', line:'hsl(var(--zk-line))',
+        ink:'hsl(var(--zk-ink))', inksoft:'hsl(var(--zk-inksoft))', dim:'hsl(var(--zk-dim))',
         blue:{DEFAULT:'#4F46E5',dark:'#4338CA',soft:'#EEF0FB'},
         green:{DEFAULT:'#16A34A',soft:'#ECFDF3'},
         gold:{DEFAULT:'#D97706',soft:'#FEF3E2'},
@@ -15,7 +15,7 @@ export default {
         red:{DEFAULT:'#DC2626',soft:'#FDECEC'},
         violet:{DEFAULT:'#4F46E5',soft:'#EEF0FB'},
         // palet editorial Kerja Sama
-        canvas:'#FAFAFA', surface:'#FFFFFF', subtle:'#F4F4F5', hairline:'#E4E4E7',
+        canvas:'hsl(var(--zk-canvas))', surface:'hsl(var(--zk-surface))', subtle:'hsl(var(--zk-subtle))', hairline:'hsl(var(--zk-line))',
         indigo2:'#4F46E5',
         border:'hsl(var(--border))',
         input:'hsl(var(--input))',
