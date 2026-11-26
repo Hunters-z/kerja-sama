@@ -1,6 +1,7 @@
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { currentUser, logout, loadDB, saveDB, logAct } from '@/lib/db.js'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import {
   LayoutDashboard, ListChecks, FileText, Users, Megaphone, Clock, Package,
   Wallet, MessagesSquare, Puzzle, Plus, Search, PanelLeft, X, Menu, Moon, Sun,
@@ -50,6 +51,7 @@ export default function Shell() {
   const [searchQ, setSearchQ] = useState('')
   const [quick, setQuick] = useState('')
   const [quickBucket, setQuickBucket] = useState('today')
+  const [quickOpen, setQuickOpen] = useState(false)
   const searchRef = useRef(null)
   const [, force] = useState(0)
 
@@ -96,7 +98,7 @@ export default function Shell() {
       : bucket === 'upcoming' ? new Date(Date.now()+864e5).toISOString().slice(0,10) : ''
     const next = { ...db, tasks:[{ id:'t'+Date.now(), teamId:user.teamId, title, assignee:user.id, status:'To Do', priority:'Sedang', project:'Operasional', pinned: bucket==='today', deadline, note:'Dicatat cepat dari quick capture.', subtasks:[] }, ...db.tasks] }
     logAct(next, user, 'menambahkan tugas cepat "' + title + '"', 'bell-plus')
-    persist(next); setQuick('')
+    persist(next); setQuick(''); setQuickOpen(false)
   }
 
   const results = useMemo(() => {
@@ -219,16 +221,43 @@ export default function Shell() {
 
         <main className="flex-1 overflow-y-auto pb-32 lg:pb-28"><Outlet/></main>
 
-        {/* Quick capture */}
+        {/* Quick capture: icon kecil yang melebar jadi text field */}
         <div className="fixed bottom-14 lg:bottom-4 left-0 right-0 z-20 px-3 sm:px-6 pointer-events-none">
-          <form onSubmit={quickAdd} className="mx-auto max-w-2xl pointer-events-auto flex items-center gap-2 rounded-xl border border-line bg-surface/95 p-1.5 pl-3 shadow-float backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/95">
-            <BellPlus className="h-4 w-4 text-inksoft shrink-0" strokeWidth={1.5}/>
-            <input value={quick} onChange={e=>setQuick(e.target.value)} placeholder="Catat tugas atau pengingat agar tidak lupa... (Enter)" className="w-full bg-transparent text-xs sm:text-sm text-ink placeholder-dim focus:outline-none dark:text-white"/>
-            <select value={quickBucket} onChange={e=>setQuickBucket(e.target.value)} className="hidden sm:block rounded-md border border-line bg-canvas px-2 py-1 text-[11px] font-medium text-inksoft focus:outline-none dark:border-zinc-700 dark:bg-zinc-800">
-              <option value="today">Hari Ini</option><option value="upcoming">Besok</option><option value="unscheduled">Tanpa Tenggat</option>
-            </select>
-            <button type="submit" className="btn-dark shrink-0">Simpan</button>
-          </form>
+          <AnimatePresence mode="wait" initial={false}>
+            {quickOpen ? (
+              <motion.form
+                key="quick-field"
+                initial={{ opacity: 0, scaleX: 0.5, x: '-25%' }}
+                animate={{ opacity: 1, scaleX: 1, x: 0 }}
+                exit={{ opacity: 0, scaleX: 0.5, x: '-25%' }}
+                transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                onSubmit={quickAdd}
+                style={{ transformOrigin: 'left center' }}
+                className="mx-auto max-w-2xl pointer-events-auto flex items-center gap-2 rounded-xl border border-line bg-surface/95 p-1.5 pl-3 shadow-float backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/95"
+              >
+                <BellPlus className="h-4 w-4 text-inksoft shrink-0" strokeWidth={1.5}/>
+                <input autoFocus value={quick} onChange={e=>setQuick(e.target.value)} placeholder="Catat tugas atau pengingat agar tidak lupa... (Enter)" className="w-full bg-transparent text-xs sm:text-sm text-ink placeholder-dim focus:outline-none dark:text-white"/>
+                <select value={quickBucket} onChange={e=>setQuickBucket(e.target.value)} className="hidden sm:block rounded-md border border-line bg-canvas px-2 py-1 text-[11px] font-medium text-inksoft focus:outline-none dark:border-zinc-700 dark:bg-zinc-800">
+                  <option value="today">Hari Ini</option><option value="upcoming">Besok</option><option value="unscheduled">Tanpa Tenggat</option>
+                </select>
+                <button type="submit" className="btn-dark shrink-0">Simpan</button>
+              </motion.form>
+            ) : (
+              <motion.button
+                key="quick-fab"
+                initial={{ opacity: 0, scale: 0.6 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.6 }}
+                whileTap={{ scale: 0.9 }}
+                transition={{ duration: 0.18, ease: 'easeOut' }}
+                onClick={() => setQuickOpen(true)}
+                title="Catat tugas / pengingat"
+                className="pointer-events-auto ml-auto mr-1 flex h-12 w-12 items-center justify-center rounded-full bg-ink text-white shadow-float hover:opacity-90 transition dark:bg-zinc-100 dark:text-zinc-900"
+              >
+                <BellPlus className="h-5 w-5" strokeWidth={1.5}/>
+              </motion.button>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Mobile bottom nav */}

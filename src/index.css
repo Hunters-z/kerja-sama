@@ -25,6 +25,15 @@
     --ring: 239 66% 58%;
     --radius: 0.75rem;
   }
+  :root {
+    --zk-canvas: 240 6% 98%;
+    --zk-surface: 0 0% 100%;
+    --zk-subtle: 240 5% 96%;
+    --zk-line: 240 6% 90%;
+    --zk-ink: 240 4% 10%;
+    --zk-inksoft: 240 4% 32%;
+    --zk-dim: 240 4% 63%;
+  }
   .dark {
     --background: 240 8% 7%;
     --foreground: 240 5% 96%;
@@ -50,15 +59,6 @@
     --zk-ink: 240 5% 96%;
     --zk-inksoft: 240 4% 70%;
     --zk-dim: 240 4% 50%;
-  }
-  :root {
-    --zk-canvas: 240 6% 98%;
-    --zk-surface: 0 0% 100%;
-    --zk-subtle: 240 5% 96%;
-    --zk-line: 240 6% 90%;
-    --zk-ink: 240 4% 10%;
-    --zk-inksoft: 240 4% 32%;
-    --zk-dim: 240 4% 63%;
   }
 }
 @layer base {
