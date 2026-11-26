@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { login, register, loadDB, saveDB } from '@/lib/db.js'
+import { loadDB, saveDB, login, register } from '@/lib/db.js'
+import { setCurrentUser } from '@/lib/supabase'
 import { webauthnSupported, enroll, verify } from '@/lib/webauthn.js'
 import { Button } from '@/components/ui/button.jsx'
 import { Input } from '@/components/ui/input.jsx'
@@ -15,16 +16,20 @@ export default function Login() {
   const nav = useNavigate()
   const go = () => nav('/')
 
-  const doLogin = e => {
+  const doLogin = async e => {
     e.preventDefault()
     const r = login(form.username, form.password)
-    r.error ? setErr(r.error) : go()
+    if (r.error) return setErr(r.error)
+    await setCurrentUser(r.user)
+    go()
   }
-  const doRegister = e => {
+  const doRegister = async e => {
     e.preventDefault()
     if (!form.name || !form.username || !form.password) return setErr('Lengkapi semua kolom')
     const r = register(form)
-    r.error ? setErr(r.error) : go()
+    if (r.error) return setErr(r.error)
+    await setCurrentUser(r.user)
+    go()
   }
   const fpLogin = async () => {
     setFpMsg(''); setErr('')
@@ -33,7 +38,9 @@ export default function Login() {
       const db = loadDB()
       const u = db.users.find(x=>x.id===db.session) || db.users.find(x=>x.credId)
       if (!u) return setErr('Belum ada akun terdaftar fingerprint di perangkat ini')
-      db.session = u.id; saveDB(db); go()
+      db.session = u.id; saveDB(db)
+      await setCurrentUser(u)
+      go()
     } catch(e) { setFpMsg(e.name==='NotAllowedError' ? 'Verifikasi dibatalkan' : 'Fingerprint gagal: '+(e.message||e.name)) }
   }
   const fpEnroll = async () => {
@@ -91,7 +98,7 @@ export default function Login() {
           <div className="flex items-center gap-3 text-[11px] text-inksoft my-4"><div className="flex-1 border-t border-line"/>atau<div className="flex-1 border-t border-line"/></div>
           {webauthnSupported() && <>
             <Button onClick={fpLogin} variant="outline" className="w-full h-12">👆 Masuk dengan Fingerprint</Button>
-            <button onClick={fpEnroll} className="w-full mt-2 text-[12px] text-inksoft hover:text-blue font-semibold py-1">Daftarkan fingerprint di perangkat ini</button>
+            <button onClick={fpEnroll} className="text-blue w-full mt-2 text-[12px] text-inksoft hover:text-zinc-800 font-semibold py-1">Daftarkan fingerprint di perangkat ini</button>
             {fpMsg && <p className="text-[12px] text-center mt-2 font-semibold text-zinc-dark">{fpMsg}</p>}
           </>}
           <div className="mt-6 card p-3.5 text-[12px] text-inksoft">

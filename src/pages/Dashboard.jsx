@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase, getCurrentUser, seedDemoData } from '@/lib/supabase'
+import { loadDB } from '@/lib/db.js'
 import { Card } from '@/components/ui/card.jsx'
 import { TrendingUp, ArrowRight, CalendarDays, BellRing, Vote, FolderKanban, FileText, Pin, Users, MessageSquare, PlusCircle, Clock } from 'lucide-react'
 
@@ -48,6 +49,18 @@ export default function Dashboard() {
       const p = new Date().toISOString().slice(0, 10)
       const pWeek = new Date(Date.now() + 7 * 864e5).toISOString().slice(0, 10)
 
+      // Fallback ke localDB jika Supabase URL belum diset (mode dev)
+      if (import.meta.env.VITE_SUPABASE_URL === 'https://placeholder.supabase.co' || !import.meta.env.VITE_SUPABASE_URL) {
+        const db = loadDB()
+        setTasks(db.tasks.filter(x => x.teamId === u.team_id))
+        setProjects(db.projects.filter(x => x.teamId === u.team_id))
+        setDocs(db.docs.filter(x => x.teamId === u.team_id))
+        setPolls(db.polls.filter(x => x.teamId === u.team_id))
+        setUsers(db.users.filter(x => x.teamId === u.team_id))
+        setLoading(false)
+        return
+      }
+      
       const { data: t } = await supabase.from('tasks').select('*').eq('team_id', u.team_id)
       const { data: pjs } = await supabase.from('projects').select('*').eq('team_id', u.team_id)
       const { data: dcs } = await supabase.from('docs').select('*').eq('team_id', u.team_id)

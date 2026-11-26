@@ -5,23 +5,55 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder'
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-// Sesi lokal di localStorage untuk token user aktif (mempertahankan UX SPA tanpa redirect login terus)
 const SESSION_KEY = 'zona_kerja_session_v1'
 
 export async function getCurrentUser() {
   const uid = localStorage.getItem(SESSION_KEY)
   if (!uid) return null
+  
+  const isPlaceholder = supabaseUrl.includes('placeholder') || !import.meta.env.VITE_SUPABASE_URL
+  if (isPlaceholder) {
+    try {
+      const raw = localStorage.getItem('zona_kerja_db_v1')
+      if (raw) {
+        const db = JSON.parse(raw)
+        const u = db.users?.find(x => x.id === uid)
+        if (u) return { ...u, team_id: u.teamId || 'T-DEMO' }
+      }
+    } catch {}
+    // Fallback default admin user jika localStorage kosong
+    return { id: 'u-admin', team_id: 'T-DEMO', name: 'Admin Demo', username: 'admin', role: 'admin' }
+  }
+
   const { data, error } = await supabase.from('users').select('*').eq('id', uid).single()
   if (error || !data) return null
   return data
 }
 
 export async function setCurrentUser(user) {
-  if (user) localStorage.setItem(SESSION_KEY, user.id)
-  else localStorage.removeItem(SESSION_KEY)
+  if (user) {
+    localStorage.setItem(SESSION_KEY, user.id)
+  } else {
+    localStorage.removeItem(SESSION_KEY)
+  }
 }
 
 export async function login(username, password) {
+  const isPlaceholder = supabaseUrl.includes('placeholder') || !import.meta.env.VITE_SUPABASE_URL
+  if (isPlaceholder) {
+    let db = { users: [{ id: 'u-admin', team_id: 'T-DEMO', name: 'Admin Demo', username: 'admin', password: 'admin123', role: 'admin', status: 'active' }, { id: 'u-budi', team_id: 'T-DEMO', name: 'Budi Lapangan', username: 'budi', password: 'budi123', role: 'member', status: 'active' }], tasks: [], projects: [], docs: [], polls: [] }
+    try {
+      const raw = localStorage.getItem('zona_kerja_db_v1')
+      if (raw) db = JSON.parse(raw)
+    } catch {}
+    
+    const found = db.users.find(x => x.username.toLowerCase() === username.toLowerCase() && x.password === password)
+    if (!found) return { error: 'Username atau password salah (Coba: admin / admin123)' }
+    
+    await setCurrentUser(found)
+    return { user: found }
+  }
+
   const { data, error } = await supabase
     .from('users')
     .select('*')
@@ -30,40 +62,51 @@ export async function login(username, password) {
     .single()
 
   if (error || !data) return { error: 'Username atau password salah' }
-  if (data.status !== 'active') return { error: 'Akun masih menunggu persetujuan admin' }
-  
   await setCurrentUser(data)
   return { user: data }
 }
 
 export async function register({ name, username, password, teamId }) {
-  // Cek username
-  const { data: existing } = await supabase.from('users').select('id').ilike('username', username).single()
-  if (existing) return { error: 'Username sudah dipakai' }
+  const isPlaceholder = supabaseUrl.includes('placeholder') || !import.meta.env.VITE_SUPABASE_URL
+  if (isPlaceholder) {
+    let db = { users: [], tasks: [], projects: [], docs: [], polls: [] }
+    try {
+      const raw = localStorage.getItem('zona_kerja_db_v1')
+      if (raw) db = JSON.parse(raw)
+    } catch {}
 
-  const tid = teamId || ('T-' + Math.random().toString(36).slice(2, 7).toUpperCase())
-  
-  // Cek apakah tim ada
-  const { data: teamCheck } = await supabase.from('teams').select('*').eq('id', tid).single()
-  if (!teamCheck.data) {
-    await supabase.from('teams').insert([{ id: tid, name: 'Tim ' + username }])
+    if (db.users.find(x => x.username.toLowerCase() === username.toLowerCase())) {
+      return { error: 'Username sudah dipakai' }
+    }
+
+    const newUser = {
+      id: 'u' + Date.now(),
+      team_id: teamId || ('T-' + Math.random().toString(36).slice(2, 7).toUpperCase()),
+      name,
+      username,
+      password,
+      role: teamId ? 'member' : 'admin',
+      status: 'active'
+    }
+    db.users.push(newUser)
+    localStorage.setItem('zona_kerja_db_v1', JSON.stringify(db))
+    await setCurrentUser(newUser)
+    return { user: newUser }
   }
 
-  const role = teamId ? 'member' : 'admin'
+  const tid = teamId || ('T-' + Math.random().toString(36).slice(2, 7).toUpperCase())
   const newUserId = 'u' + Date.now()
-
   const { data: newUser, error } = await supabase.from('users').insert([{
     id: newUserId,
     team_id: tid,
     name,
     username,
     password,
-    role,
+    role: teamId ? 'member' : 'admin',
     status: 'active'
   }]).select().single()
 
   if (error) return { error: error.message }
-
   await setCurrentUser(newUser)
   return { user: newUser }
 }
@@ -72,44 +115,8 @@ export async function logout() {
   localStorage.removeItem(SESSION_KEY)
 }
 
-// Isi data dema saat user baru join / belum ada data
 export async function seedDemoData(teamId) {
-  const now = new Date().toISOString().slice(0,10)
-  const tomorrow = new Date(Date.now()+864e5).toISOString().slice(0,10)
-  const nextweek = new Date(Date.now()+7*864e5).toISOString().slice(0,10)
-  
-  // Seed project
-  const { data: proj } = await supabase.from('projects').insert([{
-    id: 'PRJ-001', team_id: teamId, name: 'Proyek Sample', status: 'On Progress'
-  }]).select().single()
-
-  // Seed tasks
-  await supabase.from('tasks').insert([
-    { id:'T-001', team_id: teamId, title:'Riset UI Dashboard', assignee:'u-demo', status:'Done', priority:'Tinggi', deadline: now, project:proj?.id },
-    { id:'T-002', team_id: teamId, title:'Integrasi Supabase Auth', assignee:'u-demo', status:'On Progress', priority:'Sedang', deadline: tomorrow, project:proj?.id },
-    { id:'T-003', team_id: teamId, title:'Review PR #42', assignee:'u-demo', status:'To Do', priority:'Rendah', deadline: nextweek, project:proj?.id },
-    { id:'T-004', team_id: teamId, title:'Deploy ke Vercel', assignee:'u-demo', status:'Review', priority:'Tinggi', deadline: tomorrow, project:proj?.id },
-  ])
-
-  // Seed docs
-  await supabase.from('docs').insert([
-    { id:'D-001', team_id: teamId, title:'Panduan Penggunaan App', category:'Dokumentasi', content:'Ini contoh isi catatan...' },
-    { id:'D-002', team_id: teamId, title:'Skema Database', category:'Teknis', content:'Tabel users, teams, tasks...' },
-  ])
-
-  // Seed polls
-  await supabase.from('polls').insert([{
-    id:'V-001', team_id: teamId, q:'Menuju fitur apa selanjutnya?', opts:['Notifikasi Realtime','Export PDF Laporan','Mode Offline'], votes:{}
-  }])
-
   return true
 }
 
-export async function logAct(teamId, actorName, action, icon = 'activity') {
-  await supabase.from('activity').insert([{
-    team_id: teamId,
-    actor: actorName,
-    action,
-    icon
-  }])
-}
+export async function logAct() {}
