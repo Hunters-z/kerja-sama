@@ -119,10 +119,11 @@ export default function Dashboard() {
   const dateStr = new Intl.DateTimeFormat('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date())
   const nameOf = id => users.find(u => u.id === id)?.name || '—'
 
-  // Prioritize active reminders (due/upcoming)
-  const activeReminderList = tasks.filter(t => t.status !== 'Done')
+  // Prioritize active reminders (due/upcoming) & highlight main focus
+  const focusTask = tasks.find(t => t.status === 'On Progress' && t.priority === 'Tinggi') || tasks.find(t => t.status === 'On Progress') || tasks[0]
+  const activeReminderList = tasks.filter(t => t.status !== 'Done' && (!focusTask || t.id !== focusTask.id))
     .sort((a, b) => (a.deadline || '9999') < (b.deadline || '9999') ? -1 : 1)
-    .slice(0, 6)
+    .slice(0, 5)
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8 space-y-6">
@@ -193,16 +194,37 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-        {/* Priority reminders */}
-        <Card className="lg:col-span-8 overflow-hidden">
-          <div className="flex items-center justify-between border-b border-line px-5 py-3.5 dark:border-zinc-800">
-            <div className="flex items-center gap-2">
-              <BellRing className="h-4 w-4 text-inksoft" strokeWidth={1.5} />
-              <h2 className="text-sm font-semibold text-ink dark:text-white">Pengingat & Tenggat Prioritas</h2>
+        {/* Priority reminders & Focus banner */}
+        <div className="lg:col-span-8 space-y-4">
+          {focusTask && (
+            <div className="rounded-xl border border-line bg-subtle p-5 dark:border-zinc-800 dark:bg-zinc-950/60">
+              <div className="flex items-center justify-between mb-2">
+                <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-inksoft">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-600 animate-pulse" /> Fokus Utama Tim Saat Ini
+                </span>
+                <span className="font-mono text-[10px] text-dim">Tenggat: {focusTask.deadline || 'Fleksibel'}</span>
+              </div>
+              <h3 className="text-base font-semibold text-ink dark:text-white mb-1">{focusTask.title}</h3>
+              <p className="text-xs text-inksoft dark:text-zinc-400 mb-3">{focusTask.note || 'Tugas prioritas utama yang sedang dikerjakan.'}</p>
+              <div className="flex items-center justify-between pt-2 border-t border-line dark:border-zinc-800">
+                <div className="flex items-center gap-2 text-[11px] text-inksoft">
+                  <span>PIC: <strong className="text-ink dark:text-zinc-200">{nameOf(focusTask.assignee)}</strong></span>
+                  <span>• Proyek: <strong className="text-ink dark:text-zinc-200">{focusTask.project || 'Operasional'}</strong></span>
+                </div>
+                <StatusPill s={focusTask.status} />
+              </div>
             </div>
-            <div className="text-xs font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 cursor-default">+ Tambah Pengingat</div>
-          </div>
-          <div className="divide-y divide-line dark:divide-zinc-800">
+          )}
+
+          <Card className="overflow-hidden">
+            <div className="flex items-center justify-between border-b border-line px-5 py-3.5 dark:border-zinc-800">
+              <div className="flex items-center gap-2">
+                <BellRing className="h-4 w-4 text-inksoft" strokeWidth={1.5} />
+                <h2 className="text-sm font-semibold text-ink dark:text-white">Pengingat & Tenggat Lainnya</h2>
+              </div>
+              <div className="text-xs font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 cursor-default">+ Tambah Pengingat</div>
+            </div>
+            <div className="divide-y divide-line dark:divide-zinc-800">
             {activeReminderList.map(t => (
               <div key={t.id} className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 py-3.5 hover:bg-canvas dark:hover:bg-zinc-800/40 transition cursor-default">
                 <div className="flex items-start gap-3 min-w-0">
@@ -233,7 +255,8 @@ export default function Dashboard() {
             ))}
             {activeReminderList.length === 0 && <p className="p-8 text-center text-xs text-dim">Semua pengingat prioritas telah selesai.</p>}
           </div>
-        </Card>
+          </Card>
+        </div>
 
         {/* Right column */}
         <div className="lg:col-span-4 space-y-5">
