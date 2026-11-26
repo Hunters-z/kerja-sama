@@ -222,7 +222,7 @@ export default function Shell() {
         <main className="flex-1 overflow-y-auto pb-32 lg:pb-28"><Outlet/></main>
 
         {/* Quick capture: icon kecil yang melebar jadi text field */}
-        <div className="fixed bottom-14 lg:bottom-4 left-0 right-0 z-20 px-3 sm:px-6 pointer-events-none">
+        <div className="fixed bottom-[4.75rem] lg:bottom-6 left-0 right-0 z-20 px-3 sm:px-6 pointer-events-none">
           <AnimatePresence mode="wait" initial={false}>
             {quickOpen ? (
               <motion.form
@@ -241,6 +241,10 @@ export default function Shell() {
                   <option value="today">Hari Ini</option><option value="upcoming">Besok</option><option value="unscheduled">Tanpa Tenggat</option>
                 </select>
                 <button type="submit" className="btn-dark shrink-0">Simpan</button>
+                <button type="button" onClick={() => { setQuick(''); setQuickOpen(false) }} title="Tutup tanpa menyimpan"
+                  className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-dim hover:bg-subtle hover:text-ink dark:hover:bg-zinc-800 dark:hover:text-zinc-200 transition">
+                  <X className="h-4 w-4" strokeWidth={1.5}/>
+                </button>
               </motion.form>
             ) : (
               <motion.button
