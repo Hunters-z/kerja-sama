@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { AnimatePresence, motion } from 'framer-motion'
 import { supabase, getCurrentUser, seedDemoData } from '@/lib/supabase'
 import { loadDB } from '@/lib/db.js'
 import { Card } from '@/components/ui/card.jsx'
-import { TrendingUp, ArrowRight, CalendarDays, BellRing, Vote, FolderKanban, FileText, Pin, Users, MessageSquare, PlusCircle, Clock } from 'lucide-react'
+import { TrendingUp, ArrowRight, CalendarDays, BellRing, Vote, FolderKanban, FileText, FilePlus, Pin, Users, MessageSquare, PlusCircle, Clock } from 'lucide-react'
 
 export function StatusPill({ s }) {
   const map = { 'To Do': 'bg-subtle text-inksoft', 'On Progress': 'bg-zinc-50 text-zinc-700', 'Review': 'bg-amber-50 text-amber-700', 'Done': 'bg-emerald-50 text-emerald-700' }
@@ -35,6 +36,8 @@ export default function Dashboard() {
   const [polls, setPolls] = useState([])
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
+  const [noteOpen, setNoteOpen] = useState(false)
+  const [noteText, setNoteText] = useState('')
 
   useEffect(() => {
     async function load() {
@@ -84,6 +87,22 @@ export default function Dashboard() {
   }, [])
 
   if (loading) return <div className="p-8 text-sm text-zinc-400">Memuat data dari Supabase...</div>
+
+  const saveNote = e => {
+    e.preventDefault()
+    if (!noteText.trim()) return
+    const isPlaceholder = !import.meta.env.VITE_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL.includes('placeholder')
+    const doc = { id: 'D' + Date.now(), team_id: user.team_id, teamId: user.team_id, title: noteText.trim().slice(0, 60), category: 'Catatan', content: noteText.trim(), at: new Date().toISOString() }
+    if (isPlaceholder) {
+      const db = loadDB()
+      db.docs = [doc, ...(db.docs || [])]
+      localStorage.setItem('zona_kerja_db_v1', JSON.stringify(db))
+      setDocs(d => [doc, ...d])
+    } else {
+      supabase.from('docs').insert([doc]).then(() => setDocs(d => [doc, ...d]))
+    }
+    setNoteText(''); setNoteOpen(false)
+  }
 
   if (!user) {
     return (
@@ -263,7 +282,6 @@ export default function Dashboard() {
           <Card className="p-4">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-xs font-semibold uppercase tracking-wider text-inksoft dark:text-zinc-400">Catatan & Dokumen</h2>
-              <div className="text-[11px] font-medium text-ink hover:underline dark:text-zinc-200 cursor-default">+ Baru</div>
             </div>
             <div className="space-y-2">
               {docs.slice(0, 4).map(d => (
@@ -281,6 +299,51 @@ export default function Dashboard() {
                 </div>
               ))}
               {docs.length === 0 && <p className="py-3 text-center text-[11px] text-dim">Belum ada dokumen.</p>}
+            </div>
+
+            {/* Quick note: icon toggles to text field */}
+            <div className="mt-3 border-t border-line dark:border-zinc-800 pt-3">
+              <AnimatePresence mode="wait" initial={false}>
+                {noteOpen ? (
+                  <motion.form
+                    key="note-field"
+                    initial={{ opacity: 0, y: 8, scale: 0.97 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 8, scale: 0.97 }}
+                    transition={{ duration: 0.18, ease: 'easeOut' }}
+                    onSubmit={saveNote}
+                    className="space-y-2"
+                  >
+                    <textarea
+                      autoFocus
+                      value={noteText}
+                      onChange={e => setNoteText(e.target.value)}
+                      placeholder="Tulis catatan cepat..."
+                      rows={3}
+                      className="w-full resize-none rounded-lg border border-line bg-surface px-3 py-2 text-xs text-ink placeholder-dim focus:border-zinc-400 focus:outline-none dark:border-zinc-700 dark:bg-zinc-950 dark:text-white transition"
+                    />
+                    <div className="flex items-center gap-2">
+                      <button type="submit" className="rounded-md bg-ink px-3 py-1.5 text-[11px] font-medium text-white hover:opacity-90 transition dark:bg-zinc-100 dark:text-zinc-900">Simpan</button>
+                      <button type="button" onClick={() => { setNoteOpen(false); setNoteText('') }} className="rounded-md border border-line px-3 py-1.5 text-[11px] font-medium text-inksoft hover:bg-subtle dark:border-zinc-700 dark:text-zinc-300 transition">Batal</button>
+                    </div>
+                  </motion.form>
+                ) : (
+                  <motion.button
+                    key="note-icon"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    whileTap={{ scale: 0.92 }}
+                    transition={{ duration: 0.15, ease: 'easeOut' }}
+                    onClick={() => setNoteOpen(true)}
+                    title="Tambah catatan"
+                    className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-line py-2 text-[11px] font-medium text-dim hover:border-zinc-400 hover:text-ink dark:border-zinc-700 dark:hover:text-zinc-200 transition"
+                  >
+                    <FilePlus className="h-3.5 w-3.5" strokeWidth={1.5} />
+                    <span>Tambah Catatan</span>
+                  </motion.button>
+                )}
+              </AnimatePresence>
             </div>
           </Card>
 
